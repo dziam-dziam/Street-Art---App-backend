@@ -1,0 +1,42 @@
+package org.example.services.add_services;
+
+import lombok.RequiredArgsConstructor;
+import org.example.dtos.user.AppUserDto;
+import org.example.dtos.user.RegisterAppUserDto;
+import org.example.entities.AppUser;
+import org.example.mappers.AppUserMapper;
+import org.example.repositories.AppUserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AddAppUserService {
+    private final AppUserMapper appUserMapper;
+    private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public AppUserDto createAppUser(RegisterAppUserDto registerAppUserDto) {
+        if (registerAppUserDto == null) throw new IllegalArgumentException("RegisterAppUserDto is null");
+
+        String enteredEmail = registerAppUserDto.getAppUserEmail();
+        if (appUserRepository.findByAppUserEmail(enteredEmail).isPresent()) {
+            throw new IllegalArgumentException("User with email: " + enteredEmail + " already exists");
+        }
+
+        AppUserDto appUserDto = AppUserDto.builder()
+                .appUserName(registerAppUserDto.getAppUserName())
+                .appUserEmail(registerAppUserDto.getAppUserEmail())
+                .appUserPassword(passwordEncoder.encode(registerAppUserDto.getAppUserPassword()))
+                .appUserLanguagesSpoken(registerAppUserDto.getAppUserLanguagesSpoken())
+                .appUserNationality(registerAppUserDto.getAppUserNationality())
+                .appUserCity(registerAppUserDto.getAppUserCity())
+                .appUserLiveInDistrict(registerAppUserDto.getAppUserLiveInDistrict())
+                .build();
+
+        AppUser appUser = appUserMapper.mapAppUserDtoToAppUserEntity(appUserDto);
+        AppUser saved = appUserRepository.save(appUser);
+
+        return appUserMapper.mapAppUserEntityToAppUserDto(saved);
+    }
+}
