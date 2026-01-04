@@ -1,6 +1,7 @@
 package org.example.dtos.user;
 
 import lombok.*;
+import org.example.dtos.commute.CommuteDto;
 
 import java.util.Set;
 
@@ -23,5 +24,5 @@ public class AppUserDto {
 
     private String appUserLiveInDistrict;
 
-    private Set<String> appUserCommuteThroughDistricts;
+    private Set<CommuteDto> appUserCommuteDtos;
 }

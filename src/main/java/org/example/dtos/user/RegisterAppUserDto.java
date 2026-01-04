@@ -25,6 +25,4 @@ public class RegisterAppUserDto {
     private String appUserCity;
 
     private String appUserLiveInDistrict;
-
-    private Set<String> appUserCommuteThroughDistricts;
 }

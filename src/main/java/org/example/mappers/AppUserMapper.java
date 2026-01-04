@@ -2,9 +2,11 @@ package org.example.mappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.example.dtos.commute.CommuteDto;
 import org.example.dtos.user.AppUserDto;
 import org.example.entities.AppUser;
 import org.example.entities.City;
+import org.example.entities.Commute;
 import org.example.entities.District;
 import org.example.exceptions.CityNotFoundException;
 import org.example.exceptions.DistrictNotFoundByNameException;
@@ -13,12 +15,16 @@ import org.example.repositories.DistrictRepository;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Component
 @Builder
 @AllArgsConstructor
 public class AppUserMapper {
     private final CityRepository cityRepository;
     private final DistrictRepository districtRepository;
+    private final CommuteMapper commuteMapper;
 
     public AppUser mapAppUserDtoToAppUserEntity(AppUserDto appUserDto) {
         if (appUserDto == null) throw new IllegalArgumentException("AppUserDto is null");
@@ -33,6 +39,7 @@ public class AppUserMapper {
                 .orElseThrow(() -> new DistrictNotFoundByNameException(appUserDto.getAppUserLiveInDistrict()));
 
         Hibernate.initialize(cityFromDto);
+
         return AppUser.builder()
                 .appUserCity(cityFromDto)
                 .appUserName(appUserDto.getAppUserName())
@@ -41,19 +48,22 @@ public class AppUserMapper {
                 .appUserNationality(appUserDto.getAppUserNationality())
                 .appUserLanguagesSpoken(appUserDto.getAppUserLanguagesSpoken())
                 .appUserLiveInDistrict(districtFromDto)
+                .appUserCommutes(new HashSet<>())
                 .build();
     }
 
     public AppUserDto mapAppUserEntityToAppUserDto(AppUser appUserEntity) {
-        if (appUserEntity == null) throw new IllegalArgumentException("AppUserEntity is null");
-        if (appUserEntity.getAppUserCity() == null) throw new IllegalArgumentException("AppUserEntity city is null");
-        if (appUserEntity.getAppUserLiveInDistrict() == null)
-            throw new IllegalArgumentException("AppUserEntity live-in district district is null");
-
-        City appUserEntityCity = appUserEntity.getAppUserCity();
-        String appUserEntityCityName = appUserEntityCity.getCityName();
+        String appUserEntityCityName = getAppUserEntityCityName(appUserEntity);
         District appUserEntityLiveInDistrict = appUserEntity.getAppUserLiveInDistrict();
         String appUserEntityLiveInDistrictName = appUserEntityLiveInDistrict.getDistrictName();
+
+        Set<Commute> appUserEntityCommutes = appUserEntity.getAppUserCommutes();
+        Set<CommuteDto> appUserEntityCommuteDtos = new HashSet<>();
+
+        for (Commute commuteEntity : appUserEntityCommutes) {
+            CommuteDto commuteDto = commuteMapper.mapCommuteEntityToCommuteDto(commuteEntity);
+            appUserEntityCommuteDtos.add(commuteDto);
+        }
 
         return AppUserDto.builder()
                 .appUserName(appUserEntity.getAppUserName())
@@ -63,6 +73,17 @@ public class AppUserMapper {
                 .appUserNationality(appUserEntity.getAppUserNationality())
                 .appUserLanguagesSpoken(appUserEntity.getAppUserLanguagesSpoken())
                 .appUserLiveInDistrict(appUserEntityLiveInDistrictName)
+                .appUserCommuteDtos(appUserEntityCommuteDtos)
                 .build();
+    }
+
+    private static String getAppUserEntityCityName(AppUser appUserEntity) {
+        if (appUserEntity == null) throw new IllegalArgumentException("AppUserEntity is null");
+        if (appUserEntity.getAppUserCity() == null) throw new IllegalArgumentException("AppUserEntity city is null");
+        if (appUserEntity.getAppUserLiveInDistrict() == null)
+            throw new IllegalArgumentException("AppUserEntity live-in district district is null");
+
+        City appUserEntityCity = appUserEntity.getAppUserCity();
+        return appUserEntityCity.getCityName();
     }
 }

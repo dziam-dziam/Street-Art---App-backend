@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dtos.user.LoginAppUserDto;
 import org.example.dtos.user.RegisterAppUserDto;
 import org.example.entities.AppUser;
-import org.example.exceptions.AppUserNotFoundException;
+import org.example.exceptions.AppUserNotFoundByEmailException;
 import org.example.repositories.AppUserRepository;
 import org.example.services.add_and_register_services.RegisterAppUserService;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +57,7 @@ public class AuthUserController {
         String loginAppUserDtoPassword = loginAppUserDto.getAppUserPassword();
 
         AppUser appUser = appUserRepository.findByAppUserEmail(loginAppUserDtoEmail)
-                .orElseThrow(() -> new AppUserNotFoundException(loginAppUserDtoEmail));
+                .orElseThrow(() -> new AppUserNotFoundByEmailException(loginAppUserDtoEmail));
 
         if (!passwordEncoder.matches(loginAppUserDtoPassword, appUser.getAppUserPassword())) {
             throw new RuntimeException("Bad credentials");

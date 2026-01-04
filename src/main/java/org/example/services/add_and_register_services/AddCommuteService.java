@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.dtos.commute.CommuteDto;
 import org.example.dtos.commute.AddCommuteDto;
 import org.example.entities.AppUser;
-import org.example.exceptions.AppUserNotFoundException;
+import org.example.entities.Commute;
+import org.example.exceptions.AppUserNotFoundByEmailException;
+import org.example.mappers.CommuteMapper;
 import org.example.repositories.AppUserRepository;
+import org.example.repositories.CommuteRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,19 +16,28 @@ import org.springframework.stereotype.Service;
 public class AddCommuteService {
 
     private final AppUserRepository appUserRepository;
+    private final CommuteMapper commuteMapper;
+    private final CommuteRepository commuteRepository;
 
-    public CommuteDto createCommute(AddCommuteDto addCommuteDto, String appUserEmail) {
+    public CommuteDto addCommute(AddCommuteDto addCommuteDto, String commutingAppUserEmail) {
         if (addCommuteDto == null) throw new IllegalArgumentException("AddCommuteDto is null");
-        AppUser appUserWithCommute = appUserRepository.findByAppUserEmail(appUserEmail)
-                .orElseThrow(() -> new AppUserNotFoundException(appUserEmail));
+        AppUser appUserWithCommute = appUserRepository.findByAppUserEmail(commutingAppUserEmail)
+                .orElseThrow(() -> new AppUserNotFoundByEmailException(commutingAppUserEmail));
 
-
-        return CommuteDto.builder()
-                .commuteDistrictName(addCommuteDto.getCommuteDistrictName())
+        CommuteDto commuteDto = CommuteDto.builder()
+                .commuteThroughDistrictName(addCommuteDto.getCommuteThroughDistrictName())
+                .commutingAppUserEmail(commutingAppUserEmail)
                 .commuteStartHour(addCommuteDto.getCommuteStartHour())
                 .commuteStopHour(addCommuteDto.getCommuteStopHour())
                 .commuteMeansOfTransport(addCommuteDto.getCommuteMeansOfTransport())
                 .commuteTripsPerWeek(addCommuteDto.getCommuteTripsPerWeek())
                 .build();
+
+        Commute commuteEntity = commuteMapper.mapCommuteDtoToCommuteEntities(commuteDto, appUserWithCommute);
+
+        appUserWithCommute.addCommute(commuteEntity);
+
+        Commute saved = commuteRepository.save(commuteEntity);
+        return commuteMapper.mapCommuteEntityToCommuteDto(saved);
     }
 }

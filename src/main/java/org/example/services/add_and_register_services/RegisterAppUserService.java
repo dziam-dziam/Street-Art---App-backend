@@ -9,6 +9,8 @@ import org.example.repositories.AppUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
 public class RegisterAppUserService {
@@ -35,6 +37,7 @@ public class RegisterAppUserService {
                 .appUserLanguagesSpoken(registerAppUserDto.getAppUserLanguagesSpoken())
                 .appUserNationality(registerAppUserDto.getAppUserNationality())
                 .appUserLiveInDistrict(registerAppUserDto.getAppUserLiveInDistrict())
+                .appUserCommuteDtos(new HashSet<>())
                 .build();
 
         AppUser appUser = appUserMapper.mapAppUserDtoToAppUserEntity(appUserDto);

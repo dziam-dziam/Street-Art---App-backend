@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommuteDto {
-    private String commuteDistrictName;
+    private String commuteThroughDistrictName;
 
     private int commuteTripsPerWeek;
 
@@ -19,4 +19,6 @@ public class CommuteDto {
     private int commuteStopHour;
 
     private Set<MeansOfTransport> commuteMeansOfTransport;
+
+    private String commutingAppUserEmail;
 }

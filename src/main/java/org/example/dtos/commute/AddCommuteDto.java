@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class AddCommuteDto {
 
-    private String commuteDistrictName;
+    private String commuteThroughDistrictName;
 
     private int commuteTripsPerWeek;
 

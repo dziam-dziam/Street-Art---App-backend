@@ -2,7 +2,7 @@ package org.example.services.config_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entities.AppUser;
-import org.example.exceptions.AppUserNotFoundException;
+import org.example.exceptions.AppUserNotFoundByEmailException;
 import org.example.repositories.AppUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +17,7 @@ public class AppUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
         AppUser user = appUserRepository.findByAppUserEmail(email)
-                .orElseThrow(() -> new AppUserNotFoundException(email));
+                .orElseThrow(() -> new AppUserNotFoundByEmailException(email));
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getAppUserEmail())
