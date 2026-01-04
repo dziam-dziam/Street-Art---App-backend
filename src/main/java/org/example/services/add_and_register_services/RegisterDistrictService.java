@@ -1,4 +1,4 @@
-package org.example.services.add_services;
+package org.example.services.add_and_register_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.district.AddDistrictDto;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AddDistrictService {
+public class RegisterDistrictService {
 
     private final DistrictRepository districtRepository;
     private final DistrictMapper districtMapper;
@@ -27,6 +27,8 @@ public class AddDistrictService {
         DistrictDto districtDto = DistrictDto.builder()
                 .districtName(addDistrictDtoDistrictName)
                 .districtCity(addDistrictDto.getDistrictCity())
+                .districtZipCode(addDistrictDto.getDistrictZipCode())
+                .districtResidentsCount(addDistrictDto.getDistrictResidentsCount())
                 .build();
 
         District district = districtMapper.mapDistrictDtoToDistrictEntity(districtDto);

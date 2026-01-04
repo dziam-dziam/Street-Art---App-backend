@@ -2,8 +2,7 @@ package org.example.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -23,9 +22,9 @@ public class City {
     private Long cityResidentsCount;
 
     @OneToMany(mappedBy = "appUserCity")
-    private List<AppUser> cityAppUsers;
+    private Set<AppUser> cityAppUsers;
 
     @OneToMany(mappedBy = "districtCity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<District> cityDistricts;
+    private Set<District> cityDistricts;
 
 }

@@ -7,6 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DistrictDto {
+
+    private String districtZipCode;
+
     private String districtName;
 
     private String districtCity;

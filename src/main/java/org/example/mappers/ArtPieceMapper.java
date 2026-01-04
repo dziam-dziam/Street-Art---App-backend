@@ -6,7 +6,7 @@ import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.entities.ArtPiece;
 import org.example.entities.City;
 import org.example.entities.District;
-import org.example.exceptions.DistrictNotFoundException;
+import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.repositories.AppUserRepository;
 import org.example.repositories.DistrictRepository;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class ArtPieceMapper {
 
         String artPieceDtoDistrictName = artPieceDto.getArtPieceDistrict();
         District districtFromDto = districtRepository.findByDistrictName(artPieceDtoDistrictName)
-                .orElseThrow(() -> new DistrictNotFoundException(artPieceDtoDistrictName));
+                .orElseThrow(() -> new DistrictNotFoundByNameException(artPieceDtoDistrictName));
 
         return ArtPiece.builder()
                 .artPieceAddress(artPieceDto.getArtPieceAddress())

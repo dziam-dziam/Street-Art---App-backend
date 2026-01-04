@@ -1,4 +1,4 @@
-package org.example.services.add_services;
+package org.example.services.add_and_register_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.city.CityDto;
@@ -8,9 +8,11 @@ import org.example.mappers.CityMapper;
 import org.example.repositories.CityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
-public class AddCityService {
+public class RegisterCityService {
 
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
@@ -28,6 +30,7 @@ public class AddCityService {
         CityDto cityDto = CityDto.builder()
                 .cityName(addCityDtoCityName)
                 .cityResidentsCount(addCityDto.getCityResidentsCount())
+                .cityDistricts(new HashSet<>())
                 .build();
 
         City city = cityMapper.mapCityDtoToCityEntity(cityDto);

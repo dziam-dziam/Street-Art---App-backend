@@ -7,7 +7,7 @@ import org.example.entities.AppUser;
 import org.example.entities.City;
 import org.example.entities.District;
 import org.example.exceptions.CityNotFoundException;
-import org.example.exceptions.DistrictNotFoundException;
+import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.repositories.CityRepository;
 import org.example.repositories.DistrictRepository;
 import org.hibernate.Hibernate;
@@ -30,7 +30,7 @@ public class AppUserMapper {
         City cityFromDto = cityRepository.findByCityName(appUserDto.getAppUserCity())
                 .orElseThrow(() -> new CityNotFoundException(appUserDto.getAppUserCity()));
         District districtFromDto = districtRepository.findByDistrictName(appUserDto.getAppUserLiveInDistrict())
-                .orElseThrow(() -> new DistrictNotFoundException(appUserDto.getAppUserLiveInDistrict()));
+                .orElseThrow(() -> new DistrictNotFoundByNameException(appUserDto.getAppUserLiveInDistrict()));
 
         Hibernate.initialize(cityFromDto);
         return AppUser.builder()
@@ -58,6 +58,7 @@ public class AppUserMapper {
         return AppUserDto.builder()
                 .appUserName(appUserEntity.getAppUserName())
                 .appUserEmail(appUserEntity.getAppUserEmail())
+                .appUserPassword(appUserEntity.getAppUserPassword())
                 .appUserCity(appUserEntityCityName)
                 .appUserNationality(appUserEntity.getAppUserNationality())
                 .appUserLanguagesSpoken(appUserEntity.getAppUserLanguagesSpoken())

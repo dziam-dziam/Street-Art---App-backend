@@ -13,4 +13,7 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
 
     @Query("SELECT district FROM District district WHERE district.districtName = :districtName")
     Optional<District> findByDistrictName(@Param("districtName") String districtName);
+
+    @Query("SELECT district FROM District district WHERE district.districtZipCode = :districtZipCode")
+    Optional<District> findByDistrictZipCode(@Param("districtZipCode") String districtZipCode);
 }

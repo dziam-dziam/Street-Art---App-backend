@@ -1,4 +1,4 @@
-package org.example.services.add_services;
+package org.example.services.add_and_register_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.user.AppUserDto;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AddAppUserService {
+public class RegisterAppUserService {
     private final AppUserMapper appUserMapper;
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AppUserDto createAppUser(RegisterAppUserDto registerAppUserDto) {
+    public AppUserDto registerAppUser(RegisterAppUserDto registerAppUserDto) {
         if (registerAppUserDto == null) throw new IllegalArgumentException("RegisterAppUserDto is null");
 
         String enteredEmail = registerAppUserDto.getAppUserEmail();
@@ -24,13 +24,16 @@ public class AddAppUserService {
             throw new IllegalArgumentException("User with email: " + enteredEmail + " already exists");
         }
 
+        String registerAppUserDtoPassword = registerAppUserDto.getAppUserPassword();
+        String appUserDtoEncodedPassword = passwordEncoder.encode(registerAppUserDtoPassword);
+
         AppUserDto appUserDto = AppUserDto.builder()
+                .appUserCity(registerAppUserDto.getAppUserCity())
                 .appUserName(registerAppUserDto.getAppUserName())
                 .appUserEmail(registerAppUserDto.getAppUserEmail())
-                .appUserPassword(passwordEncoder.encode(registerAppUserDto.getAppUserPassword()))
+                .appUserPassword(appUserDtoEncodedPassword)
                 .appUserLanguagesSpoken(registerAppUserDto.getAppUserLanguagesSpoken())
                 .appUserNationality(registerAppUserDto.getAppUserNationality())
-                .appUserCity(registerAppUserDto.getAppUserCity())
                 .appUserLiveInDistrict(registerAppUserDto.getAppUserLiveInDistrict())
                 .build();
 

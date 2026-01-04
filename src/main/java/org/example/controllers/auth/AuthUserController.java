@@ -8,7 +8,7 @@ import org.example.dtos.user.RegisterAppUserDto;
 import org.example.entities.AppUser;
 import org.example.exceptions.AppUserNotFoundException;
 import org.example.repositories.AppUserRepository;
-import org.example.services.add_services.AddAppUserService;
+import org.example.services.add_and_register_services.RegisterAppUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +32,7 @@ public class AuthUserController {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final RegisterAppUserService registerAppUserService;
 
     private final SecurityContextRepository securityContextRepository =
             new HttpSessionSecurityContextRepository();
@@ -42,10 +43,7 @@ public class AuthUserController {
             return ResponseEntity.status(409).body("Email already exists");
         }
 
-        AppUser user = new AppUser();
-        user.setAppUserEmail(registerAppUserDto.getAppUserEmail());
-        user.setAppUserPassword(passwordEncoder.encode(registerAppUserDto.getAppUserPassword()));
-        appUserRepository.save(user);
+        registerAppUserService.registerAppUser(registerAppUserDto);
 
         return ResponseEntity.ok("Registered");
     }

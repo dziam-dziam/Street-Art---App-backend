@@ -27,6 +27,7 @@ public class DistrictMapper {
 
         return District.builder()
                 .districtName(districtDto.getDistrictName())
+                .districtZipCode(districtDto.getDistrictZipCode())
                 .districtCity(cityFromDto)
                 .districtArtPiecesCount(districtDto.getDistrictArtPiecesCount())
                 .districtResidentsCount(districtDto.getDistrictResidentsCount())
@@ -41,6 +42,7 @@ public class DistrictMapper {
 
         return DistrictDto.builder()
                 .districtCity(districtEntityCityName)
+                .districtZipCode(districtEntity.getDistrictZipCode())
                 .districtName(districtEntity.getDistrictName())
                 .districtArtPiecesCount(districtEntity.getDistrictArtPiecesCount())
                 .districtResidentsCount(districtEntity.getDistrictResidentsCount())

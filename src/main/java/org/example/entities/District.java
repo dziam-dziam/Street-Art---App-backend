@@ -21,6 +21,9 @@ public class District {
     private String districtName;
 
     @Column
+    private String districtZipCode;
+
+    @Column
     private Long districtArtPiecesCount;
 
     @Column
@@ -36,7 +39,7 @@ public class District {
     private List<Commute> districtThroughCommutes;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_dupa_id", referencedColumnName = "id")
+    @JoinColumn(name = "city_id")
     private City districtCity;
 
 }

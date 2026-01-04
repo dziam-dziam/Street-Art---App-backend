@@ -1,8 +1,9 @@
 package org.example.dtos.city;
 
 import lombok.*;
-import org.example.entities.District;
+import org.example.dtos.district.DistrictDto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -14,6 +15,6 @@ public class CityDto {
 
     private Long cityResidentsCount;
 
-    private Set<District> cityDistricts;
+    private Set<DistrictDto> cityDistricts = new HashSet<>();
 
 }

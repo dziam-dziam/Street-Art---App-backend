@@ -1,4 +1,4 @@
-package org.example.services.add_services;
+package org.example.services.add_and_register_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.location.LocationDto;

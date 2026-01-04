@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AddDistrictDto {
 
+    private String districtZipCode;
+
     private String districtName;
 
     private String districtCity;
 
-    private Long districtResidentCount;
+    private Long districtResidentsCount;
 }

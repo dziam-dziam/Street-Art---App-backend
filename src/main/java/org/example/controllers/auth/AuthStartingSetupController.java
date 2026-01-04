@@ -5,8 +5,8 @@ import org.example.dtos.city.AddCityDto;
 import org.example.dtos.city.CityDto;
 import org.example.dtos.district.AddDistrictDto;
 import org.example.dtos.district.DistrictDto;
-import org.example.services.add_services.AddCityService;
-import org.example.services.add_services.AddDistrictService;
+import org.example.services.add_and_register_services.RegisterCityService;
+import org.example.services.add_and_register_services.RegisterDistrictService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthStartingSetupController {
 
-    private final AddCityService addCityService;
-    private final AddDistrictService addDistrictService;
+    private final RegisterCityService registerCityService;
+    private final RegisterDistrictService registerDistrictService;
 
-    @PostMapping("/addCity")
-    public CityDto addCity(@RequestBody AddCityDto addCityDto) {
-        return addCityService.createCity(addCityDto);
+    @PostMapping("/registerCity")
+    public CityDto registerCity(@RequestBody AddCityDto addCityDto) {
+        return registerCityService.createCity(addCityDto);
     }
 
-    @PostMapping("/addDistrict")
-    public DistrictDto addDistrict(@RequestBody AddDistrictDto addDistrictDto) {
-        return addDistrictService.createDistrict(addDistrictDto);
+    @PostMapping("/registerDistrict")
+    public DistrictDto registerDistrict(@RequestBody AddDistrictDto addDistrictDto) {
+        return registerDistrictService.createDistrict(addDistrictDto);
     }
 }
