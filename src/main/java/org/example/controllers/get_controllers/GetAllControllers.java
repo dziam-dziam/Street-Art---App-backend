@@ -1,14 +1,14 @@
-package org.example.controllers;
+package org.example.controllers.get_controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dtos.artpiece.ArtPieceDto;
+import org.example.dtos.artpiece.ResponseArtPieceDto;
 import org.example.dtos.city.CityDto;
 import org.example.dtos.district.DistrictDto;
 import org.example.dtos.user.AppUserDto;
-import org.example.services.get_all_services.GetAllAppUsersService;
-import org.example.services.get_all_services.GetAllArtPiecesService;
-import org.example.services.get_all_services.GetAllCitiesService;
-import org.example.services.get_all_services.GetAllDistrictsService;
+import org.example.services.get_services.get_all_services.GetAllAppUsersService;
+import org.example.services.get_services.get_all_services.GetAllArtPiecesService;
+import org.example.services.get_services.get_all_services.GetAllCitiesService;
+import org.example.services.get_services.get_all_services.GetAllDistrictsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +37,7 @@ public class GetAllControllers {
 
 
     @GetMapping("/artPieces")
-    public List<ArtPieceDto> getAllArtPieces() {
+    public List<ResponseArtPieceDto> getAllArtPieces() {
         return getAllArtPiecesService.getAllArtPieces();
     }
 

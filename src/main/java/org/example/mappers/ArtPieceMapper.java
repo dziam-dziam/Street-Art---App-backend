@@ -3,13 +3,18 @@ package org.example.mappers;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.example.dtos.artpiece.ArtPieceDto;
+import org.example.dtos.artpiece.ResponseArtPieceDto;
 import org.example.entities.ArtPiece;
 import org.example.entities.City;
 import org.example.entities.District;
+import org.example.entities.Photo;
 import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.repositories.AppUserRepository;
 import org.example.repositories.DistrictRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @Component
@@ -63,6 +68,31 @@ public class ArtPieceMapper {
                 .artPieceStyles(artPieceEntity.getArtPieceStyles())
                 .artPieceTypes(artPieceEntity.getArtPieceTypes())
                 .artPieceTextLanguages(artPieceEntity.getArtPieceTextLanguages())
+                .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
+                .build();
+    }
+
+    public ResponseArtPieceDto mapArtPieceEntityToResponseDto(ArtPiece artPieceEntity) {
+        if (artPieceEntity == null) throw new IllegalArgumentException("ArtPieceEntity is null");
+        Set<Photo> artPieceEntityPhotos = artPieceEntity.getArtPiecePhotos();
+        Set<String> artPieceEntityPhotosUrls = new HashSet<>();
+        for (Photo photoEntity : artPieceEntityPhotos) {
+            String photoUrl = photoEntity.getPhotoUrl();
+            artPieceEntityPhotosUrls.add(photoUrl);
+        }
+        District artPieceEntityDistrict = artPieceEntity.getArtPieceDistrict();
+        City artPieceEntityDistrictCity = artPieceEntityDistrict.getDistrictCity();
+        String artPieceEntityCityName = artPieceEntityDistrictCity.getCityName();
+        String artPieceEntityDistrictName = artPieceEntityDistrict.getDistrictName();
+
+        return ResponseArtPieceDto.builder()
+                .artPieceAddress(artPieceEntity.getArtPieceAddress())
+                .artPiecePhotoUrls(artPieceEntityPhotosUrls)
+                .artPieceCity(artPieceEntityCityName)
+                .artPieceDistrict(artPieceEntityDistrictName)
+                .artPieceStyles(artPieceEntity.getArtPieceStyles())
+                .artPieceName(artPieceEntity.getArtPieceName())
+                .artPieceTypes(artPieceEntity.getArtPieceTypes())
                 .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
                 .build();
     }

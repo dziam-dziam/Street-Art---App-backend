@@ -1,4 +1,4 @@
-package org.example.services.get_all_services;
+package org.example.services.get_services.get_all_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.city.CityDto;

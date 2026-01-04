@@ -29,6 +29,7 @@ public class RegisterDistrictService {
                 .districtCity(addDistrictDto.getDistrictCity())
                 .districtZipCode(addDistrictDto.getDistrictZipCode())
                 .districtResidentsCount(addDistrictDto.getDistrictResidentsCount())
+                .districtArtPiecesCount(0L)
                 .build();
 
         District district = districtMapper.mapDistrictDtoToDistrictEntity(districtDto);

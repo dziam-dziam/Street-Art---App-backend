@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.controllers.add_controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ArtPieceDto;

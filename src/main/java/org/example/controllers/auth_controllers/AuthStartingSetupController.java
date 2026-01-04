@@ -1,4 +1,4 @@
-package org.example.controllers.auth;
+package org.example.controllers.auth_controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.city.AddCityDto;

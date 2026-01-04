@@ -1,20 +1,18 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.enums.ArtPieceStyles;
 import org.example.enums.ArtPieceTypes;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.util.List;
 import java.util.Set;
 
-@Data
 @Entity
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArtPiece {
@@ -51,7 +49,7 @@ public class ArtPiece {
     private Set<ArtPieceStyles> artPieceStyles;
 
     @OneToMany(mappedBy = "artPieceOnPhoto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Photo> artPiecePhotos;
+    private Set<Photo> artPiecePhotos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -64,5 +62,21 @@ public class ArtPiece {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location artPieceLocation;
+
+    @Override
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null) return false;
+        Class<? extends ArtPiece> thisClass = Hibernate.getClass(this);
+        Class<?> otherClass = Hibernate.getClass(object);
+        if (thisClass != otherClass) return false;
+        ArtPiece other = (ArtPiece) object;
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public final int hashCode() {
+        return org.hibernate.Hibernate.getClass(this).hashCode();
+    }
 
 }
