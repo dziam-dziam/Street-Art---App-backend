@@ -8,20 +8,18 @@ import org.example.entities.ArtPiece;
 import org.example.entities.City;
 import org.example.entities.District;
 import org.example.entities.Photo;
-import org.example.exceptions.DistrictNotFoundByNameException;
-import org.example.repositories.AppUserRepository;
-import org.example.repositories.DistrictRepository;
+import org.example.services.get_services.get_by_name_services.GetDistrictByNameService;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @Component
 @AllArgsConstructor
 public class ArtPieceMapper {
-    private final DistrictRepository districtRepository;
-    private final AppUserRepository appUserRepository;
+    private final GetDistrictByNameService getDistrictByNameService;
 
     public ArtPiece mapArtPieceDtoToArtPieceEntity(ArtPieceDto artPieceDto) {
         if (artPieceDto == null) throw new IllegalArgumentException("ArtPieceDto is null");
@@ -29,10 +27,9 @@ public class ArtPieceMapper {
             throw new IllegalArgumentException("ArtPieceDto district is null");
 
         String artPieceDtoDistrictName = artPieceDto.getArtPieceDistrict();
-        District districtFromDto = districtRepository.findByDistrictName(artPieceDtoDistrictName)
-                .orElseThrow(() -> new DistrictNotFoundByNameException(artPieceDtoDistrictName));
+        District districtFromDto = getDistrictByNameService.getDistrictByName(artPieceDtoDistrictName);
 
-        return ArtPiece.builder()
+        ArtPiece artPieceEntity = ArtPiece.builder()
                 .artPieceAddress(artPieceDto.getArtPieceAddress())
                 .artPieceName(artPieceDto.getArtPieceName())
                 .artPieceContainsText(artPieceDto.isArtPieceContainsText())
@@ -43,6 +40,9 @@ public class ArtPieceMapper {
                 .artPieceTypes(artPieceDto.getArtPieceTypes())
                 .artPieceTextLanguages(artPieceDto.getArtPieceTextLanguages())
                 .build();
+
+        mapPhotoUrlsToPhotoEntities(artPieceDto, artPieceEntity);
+        return artPieceEntity;
     }
 
     public ArtPieceDto mapArtPieceEntityToArtPieceDto(ArtPiece artPieceEntity) {
@@ -56,6 +56,8 @@ public class ArtPieceMapper {
         City artPieceEntityDistrictCity = artPieceEntityDistrict.getDistrictCity();
         String artPieceEntityCityName = artPieceEntityDistrictCity.getCityName();
         String artPieceEntityDistrictName = artPieceEntityDistrict.getDistrictName();
+        Set<String> artPiecePhotoUrls = mapPhotoEntitiesToUrls(artPieceEntity);
+
 
         return ArtPieceDto.builder()
                 .artPieceCity(artPieceEntityCityName)
@@ -63,37 +65,55 @@ public class ArtPieceMapper {
                 .artPieceName(artPieceEntity.getArtPieceName())
                 .artPieceContainsText(artPieceEntity.isArtPieceContainsText())
                 .artPiecePosition(artPieceEntity.getArtPiecePosition())
-                .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
                 .artPieceDistrict(artPieceEntityDistrictName)
                 .artPieceStyles(artPieceEntity.getArtPieceStyles())
                 .artPieceTypes(artPieceEntity.getArtPieceTypes())
                 .artPieceTextLanguages(artPieceEntity.getArtPieceTextLanguages())
                 .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
+                .artPiecePhotoUrls(artPiecePhotoUrls)
                 .build();
+
     }
 
     public ResponseArtPieceDto mapArtPieceEntityToResponseDto(ArtPiece artPieceEntity) {
-        if (artPieceEntity == null) throw new IllegalArgumentException("ArtPieceEntity is null");
-        Set<Photo> artPieceEntityPhotos = artPieceEntity.getArtPiecePhotos();
-        Set<String> artPieceEntityPhotosUrls = new HashSet<>();
-        for (Photo photoEntity : artPieceEntityPhotos) {
-            String photoUrl = photoEntity.getPhotoUrl();
-            artPieceEntityPhotosUrls.add(photoUrl);
-        }
+        if (artPieceEntity == null)
+            throw new IllegalArgumentException("ArtPieceEntity is null");
+        if (artPieceEntity.getArtPieceDistrict() == null)
+            throw new IllegalArgumentException("ArtPieceEntity district is null");
+        if (artPieceEntity.getArtPieceDistrict().getDistrictCity() == null)
+            throw new IllegalArgumentException("ArtPieceEntity city is null");
+
+
         District artPieceEntityDistrict = artPieceEntity.getArtPieceDistrict();
         City artPieceEntityDistrictCity = artPieceEntityDistrict.getDistrictCity();
         String artPieceEntityCityName = artPieceEntityDistrictCity.getCityName();
         String artPieceEntityDistrictName = artPieceEntityDistrict.getDistrictName();
+        Set<String> artPiecePhotoUrls = mapPhotoEntitiesToUrls(artPieceEntity);
 
         return ResponseArtPieceDto.builder()
                 .artPieceAddress(artPieceEntity.getArtPieceAddress())
-                .artPiecePhotoUrls(artPieceEntityPhotosUrls)
                 .artPieceCity(artPieceEntityCityName)
                 .artPieceDistrict(artPieceEntityDistrictName)
                 .artPieceStyles(artPieceEntity.getArtPieceStyles())
                 .artPieceName(artPieceEntity.getArtPieceName())
                 .artPieceTypes(artPieceEntity.getArtPieceTypes())
                 .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
+                .artPiecePhotoUrls(artPiecePhotoUrls)
                 .build();
+    }
+
+    private static void mapPhotoUrlsToPhotoEntities(ArtPieceDto artPieceDto, ArtPiece artPieceEntity) {
+        Set<String> artPiecePhotoUrls = artPieceDto.getArtPiecePhotoUrls();
+        if (artPiecePhotoUrls != null) {
+            artPiecePhotoUrls.forEach(artPieceEntity::addPhoto);
+        }
+    }
+
+    private static Set<String> mapPhotoEntitiesToUrls(ArtPiece artPieceEntity) {
+        Set<Photo> artPieceEntityPhotos = artPieceEntity.getArtPiecePhotos();
+
+        return artPieceEntityPhotos
+                == null ? Collections.emptySet() :
+                artPieceEntityPhotos.stream().map(Photo::getPhotoUrl).collect(Collectors.toSet());
     }
 }

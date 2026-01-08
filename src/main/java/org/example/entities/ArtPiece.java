@@ -7,6 +7,7 @@ import org.example.enums.ArtPieceTypes;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -49,7 +50,8 @@ public class ArtPiece {
     private Set<ArtPieceStyles> artPieceStyles;
 
     @OneToMany(mappedBy = "artPieceOnPhoto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Photo> artPiecePhotos;
+    @Builder.Default
+    private Set<Photo> artPiecePhotos = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -62,6 +64,23 @@ public class ArtPiece {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location artPieceLocation;
+
+    public void addPhoto(String photoUrl){
+        if (photoUrl == null) throw new IllegalArgumentException("Photo URL is null");
+        Photo artPiecePhoto = Photo.builder()
+                .photoUrl(photoUrl)
+                .artPieceOnPhoto(this)
+                .build();
+
+        artPiecePhotos.add(artPiecePhoto);
+    }
+
+    public Photo removePhoto(Photo artPiecePhotoToRemoval){
+        if(artPiecePhotoToRemoval == null) throw new IllegalArgumentException("ArtPiece Photo that was to be removed is null");
+        artPiecePhotos.remove(artPiecePhotoToRemoval);
+        artPiecePhotoToRemoval.setArtPieceOnPhoto(null);
+        return artPiecePhotoToRemoval;
+    }
 
     @Override
     public final boolean equals(Object object) {

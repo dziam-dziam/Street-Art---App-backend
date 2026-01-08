@@ -1,13 +1,12 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,5 +22,22 @@ public class Photo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "art_piece_id")
     private ArtPiece artPieceOnPhoto;
+
+    @Override
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null) return false;
+        Class<? extends Photo> thisClass = Hibernate.getClass(this);
+        Class<?> otherClass = Hibernate.getClass(object);
+        if (thisClass != otherClass) return false;
+        Photo other = (Photo) object;
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public final int hashCode(){
+        return Hibernate.getClass(this).hashCode();
+    }
+
 }
 

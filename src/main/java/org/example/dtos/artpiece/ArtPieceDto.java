@@ -5,6 +5,7 @@ import org.example.dtos.location.LocationDto;
 import org.example.enums.ArtPieceStyles;
 import org.example.enums.ArtPieceTypes;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -34,5 +35,5 @@ public class ArtPieceDto {
 
     private Set<String> artPieceTextLanguages;
 
-    private Set<String> artPiecePhotoUrls;
+    private Set<String> artPiecePhotoUrls = new HashSet<>();
 }
