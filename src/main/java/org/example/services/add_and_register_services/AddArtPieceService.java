@@ -5,7 +5,6 @@ import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.AddArtPieceDto;
 import org.example.entities.ArtPiece;
 import org.example.entities.District;
-import org.example.entities.Location;
 import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.mappers.ArtPieceMapper;
 import org.example.mappers.LocationMapper;
