@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.ResponseArtPieceDto;
-import org.example.entities.ArtPiece;
-import org.example.entities.City;
-import org.example.entities.District;
-import org.example.entities.Photo;
+import org.example.entities.*;
 import org.example.services.get_services.get_by_name_services.GetDistrictByNameService;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ArtPieceMapper {
     private final GetDistrictByNameService getDistrictByNameService;
+    private final LocationMapper locationMapper;
 
     public ArtPiece mapArtPieceDtoToArtPieceEntity(ArtPieceDto artPieceDto) {
         if (artPieceDto == null) throw new IllegalArgumentException("ArtPieceDto is null");
@@ -29,6 +27,7 @@ public class ArtPieceMapper {
         String artPieceDtoDistrictName = artPieceDto.getArtPieceDistrict();
         District districtFromDto = getDistrictByNameService.getDistrictByName(artPieceDtoDistrictName);
 
+        //TODO LOCATION ZOSTANIE PODANE JAKO ARGUMENT I BĘDZIEMY DODAWAĆ JĄ W BUILDERZE
         ArtPiece artPieceEntity = ArtPiece.builder()
                 .artPieceAddress(artPieceDto.getArtPieceAddress())
                 .artPieceName(artPieceDto.getArtPieceName())

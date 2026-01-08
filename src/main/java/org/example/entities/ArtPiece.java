@@ -75,13 +75,6 @@ public class ArtPiece {
         artPiecePhotos.add(artPiecePhoto);
     }
 
-    public Photo removePhoto(Photo artPiecePhotoToRemoval){
-        if(artPiecePhotoToRemoval == null) throw new IllegalArgumentException("ArtPiece Photo that was to be removed is null");
-        artPiecePhotos.remove(artPiecePhotoToRemoval);
-        artPiecePhotoToRemoval.setArtPieceOnPhoto(null);
-        return artPiecePhotoToRemoval;
-    }
-
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;
@@ -95,7 +88,7 @@ public class ArtPiece {
 
     @Override
     public final int hashCode() {
-        return org.hibernate.Hibernate.getClass(this).hashCode();
+        return Hibernate.getClass(this).hashCode();
     }
 
 }

@@ -1,7 +1,6 @@
 package org.example.dtos.artpiece;
 
 import lombok.*;
-import org.example.dtos.location.LocationDto;
 import org.example.enums.ArtPieceStyles;
 import org.example.enums.ArtPieceTypes;
 
@@ -26,8 +25,6 @@ public class ArtPieceDto {
     private String artPieceDistrict;
 
     private String artPieceCity;
-
-    private LocationDto artPieceLocation;
 
     private Set<ArtPieceTypes> artPieceTypes;
 
