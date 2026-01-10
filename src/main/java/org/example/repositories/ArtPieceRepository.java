@@ -13,4 +13,10 @@ public interface ArtPieceRepository extends JpaRepository<ArtPiece, Long> {
 
     @Query("SELECT artpiece FROM ArtPiece artpiece WHERE artpiece.artPieceDistrict.districtName = :districtName ")
     List<ArtPiece> getArtPiecesFromDistrict(@Param("districtName") String districtName);
+
+    @Query("SELECT artpiece FROM ArtPiece artpiece WHERE " +
+            "artpiece.artPieceLocation.locationLongitude = :artPieceLongitude " +
+            "AND artpiece.artPieceLocation.locationLatitude = :artPieceLatitude")
+    List<ArtPiece> getArtPiecesByLocationLatitudeAndLongitude(@Param("artPieceLatitude") double artPieceLatitude,
+                                                              @Param("artPieceLongitude") double artPieceLongitude);
 }

@@ -24,10 +24,8 @@ public class Location {
     @Column
     private double locationLatitude;
 
-    @Column
-    private double locationHeight;
-
     @OneToMany(mappedBy = "artPieceLocation")
+    @Builder.Default
     private Set<ArtPiece> locationArtPieces = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,6 +34,12 @@ public class Location {
 
     //TODO DODAĆ METODĘ ADD ART PIECE ŻEBY Z TEJ STRONY ART PIECE TEŻ BYŁ POŁĄCZONY Z LOCATION
     //TODO DODAĆ METODĘ ADD LOCATION W DISTRICT ABY OD STRONY DISTRICT LOCATION BYŁO RÓWNIEŻ PODŁĄCZONE
+
+    public void addArtPiece(ArtPiece artPiece){
+        if (artPiece == null) throw new IllegalArgumentException("ArtPiece entity is null");
+        locationArtPieces.add(artPiece);
+        artPiece.setArtPieceLocation(this);
+    }
 
     @Override
     public final boolean equals(Object object) {

@@ -27,7 +27,6 @@ public class ArtPieceMapper {
         String artPieceDtoDistrictName = artPieceDto.getArtPieceDistrict();
         District districtFromDto = getDistrictByNameService.getDistrictByName(artPieceDtoDistrictName);
 
-        //TODO LOCATION ZOSTANIE PODANE JAKO ARGUMENT I BĘDZIEMY DODAWAĆ JĄ W BUILDERZE
         ArtPiece artPieceEntity = ArtPiece.builder()
                 .artPieceAddress(artPieceDto.getArtPieceAddress())
                 .artPieceName(artPieceDto.getArtPieceName())
