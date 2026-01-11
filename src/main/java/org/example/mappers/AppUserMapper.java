@@ -12,7 +12,6 @@ import org.example.exceptions.CityNotFoundException;
 import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.repositories.CityRepository;
 import org.example.repositories.DistrictRepository;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -38,8 +37,6 @@ public class AppUserMapper {
         District districtFromDto = districtRepository.findByDistrictName(appUserDto.getAppUserLiveInDistrict())
                 .orElseThrow(() -> new DistrictNotFoundByNameException(appUserDto.getAppUserLiveInDistrict()));
 
-        Hibernate.initialize(cityFromDto);
-
         return AppUser.builder()
                 .appUserCity(cityFromDto)
                 .appUserName(appUserDto.getAppUserName())
@@ -53,6 +50,16 @@ public class AppUserMapper {
     }
 
     public AppUserDto mapAppUserEntityToAppUserDto(AppUser appUserEntity) {
+        if (appUserEntity == null) throw new IllegalArgumentException("AppUserEntity is null");
+        if (getAppUserEntityCityName(appUserEntity) == null)
+            throw new IllegalArgumentException("AppUserEntity city name is null");
+        if (appUserEntity.getAppUserLiveInDistrict() == null)
+            throw new IllegalArgumentException("AppUserEntity live-in district is null");
+        if (appUserEntity.getAppUserLiveInDistrict().getDistrictName() == null)
+            throw new IllegalArgumentException("AppUserEntity live-in district name is null ");
+        if (appUserEntity.getAppUserCommutes() == null)
+            throw new IllegalArgumentException("AppUserEntity commutes are null");
+
         String appUserEntityCityName = getAppUserEntityCityName(appUserEntity);
         District appUserEntityLiveInDistrict = appUserEntity.getAppUserLiveInDistrict();
         String appUserEntityLiveInDistrictName = appUserEntityLiveInDistrict.getDistrictName();
