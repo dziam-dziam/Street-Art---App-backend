@@ -61,7 +61,10 @@ public class AddArtPieceService {
         ArtPiece artPiece = artPieceMapper.mapArtPieceDtoToArtPieceEntity(artPieceDto);
         artPiece.setArtPieceLocation(artPieceLocation);
 
+        artPieceLocation.addArtPiece(artPiece);
+        artPieceLocation.setLocationDistrict(artPieceDtoDistrictEntity);
         artPieceDtoDistrictEntity.addArtPiece(artPiece);
+
 
         ArtPiece saved = artPieceRepository.save(artPiece);
 

@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.enums.ArtPieceStyles;
 import org.example.enums.ArtPieceTypes;
-import org.example.exceptions.PhotoNotFoundException;
-import org.example.repositories.PhotoRepository;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -17,9 +15,8 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class ArtPiece {
-    private final PhotoRepository photoRepository;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,13 +75,13 @@ public class ArtPiece {
 
         artPiecePhotos.add(artPiecePhoto);
     }
-    public void removePhoto(String photoUrl){
-        if (photoUrl == null) throw new IllegalArgumentException("Photo URL is null");
-        Photo photoToRemove = photoRepository.findPhotoByUrl(photoUrl)
-                .orElseThrow(() -> new PhotoNotFoundException(photoUrl));
 
-        artPiecePhotos.remove(photoToRemove);
+    public void removePhoto(Photo photo) {
+        if (photo == null) throw new IllegalArgumentException("Photo is null");
+        artPiecePhotos.remove(photo);
+        photo.setArtPieceOnPhoto(null);
     }
+
 
     @Override
     public final boolean equals(Object object) {

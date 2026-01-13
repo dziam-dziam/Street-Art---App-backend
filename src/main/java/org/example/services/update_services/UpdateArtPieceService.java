@@ -7,14 +7,17 @@ import org.example.dtos.artpiece.UpdateArtPiecePhotoDto;
 import org.example.entities.ArtPiece;
 import org.example.entities.District;
 import org.example.entities.Location;
+import org.example.entities.Photo;
 import org.example.exceptions.ArtPieceNotFoundException;
 import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.exceptions.LocationAlreadyOccupiedException;
+import org.example.exceptions.PhotoNotFoundByUrlException;
 import org.example.mappers.ArtPieceMapper;
 import org.example.mappers.LocationMapper;
 import org.example.repositories.ArtPieceRepository;
 import org.example.repositories.DistrictRepository;
 import org.example.repositories.LocationRepository;
+import org.example.repositories.PhotoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -28,6 +31,7 @@ public class UpdateArtPieceService {
     private final LocationRepository locationRepository;
     private final DistrictRepository districtRepository;
     private final ArtPieceMapper artPieceMapper;
+    private final PhotoRepository photoRepository;
 
     public ArtPieceDto updateArtPieceById(Long artPieceId, UpdateArtPieceDto updatedArtPieceDto) {
         ArtPiece artPieceToBeUpdated = artPieceRepository.findById(artPieceId)
@@ -78,14 +82,21 @@ public class UpdateArtPieceService {
         return artPieceMapper.mapArtPieceEntityToArtPieceDto(artPieceToBeUpdated);
     }
 
-    public ArtPieceDto updateRemoveArtPiecePhotos(Long artPieceId, UpdateArtPiecePhotoDto updateArtPiecePhotoDto) {
+    public ArtPieceDto updateRemoveArtPiecePhotos(Long artPieceId,String photoUrl) {
         ArtPiece artPieceToBeUpdated = artPieceRepository.findById(artPieceId)
                 .orElseThrow(() -> new ArtPieceNotFoundException(artPieceId));
 
-        Set<String> artPiecePhotoUrls = updateArtPiecePhotoDto.getArtPiecePhotoUrls();
-        if (artPiecePhotoUrls != null) {
-            artPiecePhotoUrls.forEach(artPieceToBeUpdated::removePhoto);
+        if (photoUrl == null) throw new IllegalArgumentException("Photo URL is null");
+
+        Photo photoToRemove = photoRepository.findPhotoByUrl(photoUrl)
+                .orElseThrow(() -> new PhotoNotFoundByUrlException(photoUrl));
+
+        boolean removed = artPieceToBeUpdated.getArtPiecePhotos().remove(photoToRemove);
+
+        if (removed) {
+            photoToRemove.setArtPieceOnPhoto(null);
         }
+        artPieceToBeUpdated.removePhoto(photoToRemove);
 
         artPieceRepository.save(artPieceToBeUpdated);
 

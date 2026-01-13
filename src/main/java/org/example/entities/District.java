@@ -14,6 +14,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class District {
+    private static final long INITIAL_ART_PIECES_COUNT = 0L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +27,8 @@ public class District {
     private String districtZipCode;
 
     @Column
-    private Long districtArtPiecesCount;
+    @Builder.Default
+    private Long districtArtPiecesCount = 0L;
 
     @Column
     private Long districtResidentsCount;
@@ -43,6 +46,17 @@ public class District {
     @JoinColumn(name = "city_id")
     private City districtCity;
 
+    public void addArtPiece(ArtPiece artPiece){
+        if (artPiece == null) throw new IllegalArgumentException("ArtPiece entity is null");
+        if (districtArtPieces == null) districtArtPieces = new java.util.HashSet<>();
+        if (districtArtPiecesCount == null) districtArtPiecesCount = INITIAL_ART_PIECES_COUNT;
+
+        districtArtPieces.add(artPiece);
+        artPiece.setArtPieceDistrict(this);
+
+        districtArtPiecesCount = districtArtPiecesCount + 1;
+    }
+
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;
@@ -57,13 +71,6 @@ public class District {
     @Override
     public final int hashCode() {
         return org.hibernate.Hibernate.getClass(this).hashCode();
-    }
-
-    public void addArtPiece(ArtPiece artPiece){
-        getDistrictArtPieces().add(artPiece);
-        artPiece.setArtPieceDistrict(this);
-        Long artPiecesInDistrictCurrent = getDistrictArtPiecesCount();
-        setDistrictArtPiecesCount(artPiecesInDistrictCurrent + 1);
     }
 
 }

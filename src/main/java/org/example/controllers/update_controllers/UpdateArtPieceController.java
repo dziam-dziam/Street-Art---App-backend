@@ -13,18 +13,19 @@ import org.springframework.web.bind.annotation.*;
 public class UpdateArtPieceController {
     private final UpdateArtPieceService updateArtPieceService;
 
-    @PutMapping("artPiece/id")
-    public ArtPieceDto updateArtPiece(@PathVariable Long id, UpdateArtPieceDto updateArtPieceDto){
-        return updateArtPieceService.updateArtPieceById(id,updateArtPieceDto);
+    @PutMapping("artPiece/{id}")
+    public ArtPieceDto updateArtPiece(@PathVariable Long id, @RequestBody UpdateArtPieceDto updateArtPieceDto) {
+        return updateArtPieceService.updateArtPieceById(id, updateArtPieceDto);
     }
 
-    @PutMapping("photoAdd/id")
-    public ArtPieceDto updatePhotoAdd(@PathVariable Long id, UpdateArtPiecePhotoDto updateArtPiecePhotoDto){
-        return updateArtPieceService.updateAddArtPiecePhotos(id,updateArtPiecePhotoDto);
+    @PutMapping("photoAdd/{id}")
+    public ArtPieceDto updatePhotoAdd(@PathVariable Long id, @RequestBody UpdateArtPiecePhotoDto updateArtPiecePhotoDto) {
+        return updateArtPieceService.updateAddArtPiecePhotos(id, updateArtPiecePhotoDto);
     }
-    @PutMapping("photoRemove/id")
-    public ArtPieceDto updatePhotoRemove(@PathVariable Long id, UpdateArtPiecePhotoDto updateArtPiecePhotoDto){
-        return updateArtPieceService.updateRemoveArtPiecePhotos(id,updateArtPiecePhotoDto);
+
+    @PutMapping("photoRemove/{id}")
+    public ArtPieceDto updatePhotoRemove(@PathVariable Long id, @RequestParam String photoUrl) {
+        return updateArtPieceService.updateRemoveArtPiecePhotos(id, photoUrl);
     }
 
 

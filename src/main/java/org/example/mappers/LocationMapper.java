@@ -16,9 +16,9 @@ import java.math.RoundingMode;
 @AllArgsConstructor
 public class LocationMapper {
 
-    //TODO w tym miejscu użytkownik dostawać będzie alert o tym że w danej lokacji już istnieje jakiś art piece.
     private final GeocodingService geocodingService;
     private final LocationRepository locationRepository;
+    private final int SCALE_OF_ROUNDING = 6;
 
     public Location mapAddressToLocationEntity(String address, String city) {
         if (address == null || address.isBlank()) throw new IllegalArgumentException("Address is null/blank");
@@ -44,7 +44,7 @@ public class LocationMapper {
     }
 
     private double round(double value){
-        return BigDecimal.valueOf(value).setScale(6, RoundingMode.HALF_UP).doubleValue();
+        return BigDecimal.valueOf(value).setScale(SCALE_OF_ROUNDING, RoundingMode.HALF_UP).doubleValue();
     }
 
 }

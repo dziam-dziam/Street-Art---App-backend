@@ -5,7 +5,7 @@ import lombok.Builder;
 import org.example.dtos.district.DistrictDto;
 import org.example.entities.City;
 import org.example.entities.District;
-import org.example.exceptions.CityNotFoundException;
+import org.example.exceptions.CityNotFoundByNameException;
 import org.example.repositories.CityRepository;
 import org.example.repositories.DistrictRepository;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class DistrictMapper {
 
         String districtCityName = districtDto.getDistrictCity();
         City cityFromDto = cityRepository.findByCityName(districtCityName)
-                .orElseThrow(() -> new CityNotFoundException(districtCityName));
+                .orElseThrow(() -> new CityNotFoundByNameException(districtCityName));
 
         return District.builder()
                 .districtName(districtDto.getDistrictName())

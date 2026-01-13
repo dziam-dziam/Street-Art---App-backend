@@ -8,7 +8,7 @@ import org.example.entities.AppUser;
 import org.example.entities.City;
 import org.example.entities.Commute;
 import org.example.entities.District;
-import org.example.exceptions.CityNotFoundException;
+import org.example.exceptions.CityNotFoundByNameException;
 import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.repositories.CityRepository;
 import org.example.repositories.DistrictRepository;
@@ -33,7 +33,7 @@ public class AppUserMapper {
             throw new IllegalArgumentException("AppUserDto live-in district is null");
 
         City cityFromDto = cityRepository.findByCityName(appUserDto.getAppUserCity())
-                .orElseThrow(() -> new CityNotFoundException(appUserDto.getAppUserCity()));
+                .orElseThrow(() -> new CityNotFoundByNameException(appUserDto.getAppUserCity()));
         District districtFromDto = districtRepository.findByDistrictName(appUserDto.getAppUserLiveInDistrict())
                 .orElseThrow(() -> new DistrictNotFoundByNameException(appUserDto.getAppUserLiveInDistrict()));
 
