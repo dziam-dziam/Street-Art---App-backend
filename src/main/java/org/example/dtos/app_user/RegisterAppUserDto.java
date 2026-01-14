@@ -1,4 +1,4 @@
-package org.example.dtos.user;
+package org.example.dtos.app_user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

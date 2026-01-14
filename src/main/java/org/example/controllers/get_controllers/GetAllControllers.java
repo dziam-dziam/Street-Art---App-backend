@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ResponseArtPieceDto;
 import org.example.dtos.city.CityDto;
 import org.example.dtos.district.DistrictDto;
-import org.example.dtos.user.AppUserDto;
+import org.example.dtos.app_user.AppUserDto;
 import org.example.services.get_services.get_all_services.GetAllAppUsersService;
 import org.example.services.get_services.get_all_services.GetAllArtPiecesService;
 import org.example.services.get_services.get_all_services.GetAllCitiesService;

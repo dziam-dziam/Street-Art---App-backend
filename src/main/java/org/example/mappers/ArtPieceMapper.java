@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.ResponseArtPieceDto;
+import org.example.dtos.photo.PhotoResponseDto;
 import org.example.entities.*;
 import org.example.services.get_services.get_by_name_services.GetDistrictByNameService;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class ArtPieceMapper {
         String artPieceDtoDistrictName = artPieceDto.getArtPieceDistrict();
         District districtFromDto = getDistrictByNameService.getDistrictByName(artPieceDtoDistrictName);
 
-        ArtPiece artPieceEntity = ArtPiece.builder()
+        return ArtPiece.builder()
                 .artPieceAddress(artPieceDto.getArtPieceAddress())
                 .artPieceName(artPieceDto.getArtPieceName())
                 .artPieceContainsText(artPieceDto.isArtPieceContainsText())
@@ -38,9 +39,6 @@ public class ArtPieceMapper {
                 .artPieceTypes(artPieceDto.getArtPieceTypes())
                 .artPieceTextLanguages(artPieceDto.getArtPieceTextLanguages())
                 .build();
-
-        mapPhotoUrlsToPhotoEntities(artPieceDto, artPieceEntity);
-        return artPieceEntity;
     }
 
     public ArtPieceDto mapArtPieceEntityToArtPieceDto(ArtPiece artPieceEntity) {
@@ -54,8 +52,6 @@ public class ArtPieceMapper {
         City artPieceEntityDistrictCity = artPieceEntityDistrict.getDistrictCity();
         String artPieceEntityCityName = artPieceEntityDistrictCity.getCityName();
         String artPieceEntityDistrictName = artPieceEntityDistrict.getDistrictName();
-        Set<String> artPiecePhotoUrls = mapPhotoEntitiesToUrls(artPieceEntity);
-
 
         return ArtPieceDto.builder()
                 .artPieceCity(artPieceEntityCityName)
@@ -67,8 +63,8 @@ public class ArtPieceMapper {
                 .artPieceStyles(artPieceEntity.getArtPieceStyles())
                 .artPieceTypes(artPieceEntity.getArtPieceTypes())
                 .artPieceTextLanguages(artPieceEntity.getArtPieceTextLanguages())
+                .artPiecePhotos(mapPhotoEntitiesToPhotoResponseDtos(artPieceEntity))
                 .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
-                .artPiecePhotoUrls(artPiecePhotoUrls)
                 .build();
 
     }
@@ -86,7 +82,6 @@ public class ArtPieceMapper {
         City artPieceEntityDistrictCity = artPieceEntityDistrict.getDistrictCity();
         String artPieceEntityCityName = artPieceEntityDistrictCity.getCityName();
         String artPieceEntityDistrictName = artPieceEntityDistrict.getDistrictName();
-        Set<String> artPiecePhotoUrls = mapPhotoEntitiesToUrls(artPieceEntity);
 
         return ResponseArtPieceDto.builder()
                 .artPieceAddress(artPieceEntity.getArtPieceAddress())
@@ -95,23 +90,24 @@ public class ArtPieceMapper {
                 .artPieceStyles(artPieceEntity.getArtPieceStyles())
                 .artPieceName(artPieceEntity.getArtPieceName())
                 .artPieceTypes(artPieceEntity.getArtPieceTypes())
+                .artPiecePhotos(mapPhotoEntitiesToPhotoResponseDtos(artPieceEntity))
                 .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
-                .artPiecePhotoUrls(artPiecePhotoUrls)
                 .build();
     }
 
-    private static void mapPhotoUrlsToPhotoEntities(ArtPieceDto artPieceDto, ArtPiece artPieceEntity) {
-        Set<String> artPiecePhotoUrls = artPieceDto.getArtPiecePhotoUrls();
-        if (artPiecePhotoUrls != null) {
-            artPiecePhotoUrls.forEach(artPieceEntity::addPhoto);
-        }
+    private static Set<PhotoResponseDto> mapPhotoEntitiesToPhotoResponseDtos(ArtPiece artPieceEntity) {
+        Set<Photo> photos = artPieceEntity.getArtPiecePhotos();
+
+        if (photos == null) return Collections.emptySet();
+
+        return photos.stream()
+                .map(p -> PhotoResponseDto.builder()
+                        .fileName(p.getFileName())
+                        .contentType(p.getContentType())
+                        .sizeBytes(p.getSizeBytes())
+                        .downloadUrl("/api/photos/" + p.getId())
+                        .build())
+                .collect(Collectors.toSet());
     }
 
-    private static Set<String> mapPhotoEntitiesToUrls(ArtPiece artPieceEntity) {
-        Set<Photo> artPieceEntityPhotos = artPieceEntity.getArtPiecePhotos();
-
-        return artPieceEntityPhotos
-                == null ? Collections.emptySet() :
-                artPieceEntityPhotos.stream().map(Photo::getPhotoUrl).collect(Collectors.toSet());
-    }
 }

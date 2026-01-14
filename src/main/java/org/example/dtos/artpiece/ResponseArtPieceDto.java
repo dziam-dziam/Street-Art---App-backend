@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.dtos.photo.PhotoResponseDto;
 import org.example.enums.ArtPieceStyles;
 import org.example.enums.ArtPieceTypes;
 
@@ -29,5 +30,6 @@ public class ResponseArtPieceDto {
 
     private Set<ArtPieceStyles> artPieceStyles;
 
-    private Set<String> artPiecePhotoUrls;
+    private Set<PhotoResponseDto> artPiecePhotos;
+
 }

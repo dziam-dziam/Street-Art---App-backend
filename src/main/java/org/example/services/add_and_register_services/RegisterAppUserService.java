@@ -1,8 +1,8 @@
 package org.example.services.add_and_register_services;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dtos.user.AppUserDto;
-import org.example.dtos.user.RegisterAppUserDto;
+import org.example.dtos.app_user.AppUserDto;
+import org.example.dtos.app_user.RegisterAppUserDto;
 import org.example.entities.AppUser;
 import org.example.mappers.AppUserMapper;
 import org.example.repositories.AppUserRepository;

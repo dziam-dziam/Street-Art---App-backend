@@ -55,7 +55,6 @@ public class AddArtPieceService {
                 .artPieceCity(addArtPieceDtoCityName)
                 .artPieceTextLanguages(addArtPieceDto.getArtPieceTextLanguages())
                 .artPieceUserDescription(addArtPieceDto.getArtPieceUserDescription())
-                .artPiecePhotoUrls(addArtPieceDto.getArtPiecePhotoUrls())
                 .build();
 
         ArtPiece artPiece = artPieceMapper.mapArtPieceDtoToArtPieceEntity(artPieceDto);

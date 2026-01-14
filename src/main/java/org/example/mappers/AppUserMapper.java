@@ -3,7 +3,7 @@ package org.example.mappers;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.example.dtos.commute.CommuteDto;
-import org.example.dtos.user.AppUserDto;
+import org.example.dtos.app_user.AppUserDto;
 import org.example.entities.AppUser;
 import org.example.entities.City;
 import org.example.entities.Commute;

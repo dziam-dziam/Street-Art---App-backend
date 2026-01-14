@@ -3,8 +3,8 @@ package org.example.services.update_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.commute.CommuteDto;
-import org.example.dtos.user.AppUserDto;
-import org.example.dtos.user.UpdateAppUserDto;
+import org.example.dtos.app_user.AppUserDto;
+import org.example.dtos.app_user.UpdateAppUserDto;
 import org.example.entities.AppUser;
 import org.example.entities.City;
 import org.example.entities.Commute;

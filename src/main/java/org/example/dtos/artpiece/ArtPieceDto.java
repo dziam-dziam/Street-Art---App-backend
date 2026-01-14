@@ -1,6 +1,7 @@
 package org.example.dtos.artpiece;
 
 import lombok.*;
+import org.example.dtos.photo.PhotoResponseDto;
 import org.example.enums.ArtPieceStyles;
 import org.example.enums.ArtPieceTypes;
 
@@ -32,5 +33,5 @@ public class ArtPieceDto {
 
     private Set<String> artPieceTextLanguages;
 
-    private Set<String> artPiecePhotoUrls = new HashSet<>();
+    private Set<PhotoResponseDto> artPiecePhotos;
 }

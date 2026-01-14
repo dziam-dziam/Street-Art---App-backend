@@ -33,6 +33,4 @@ public class AddArtPieceDto {
     private Set<ArtPieceStyles> artPieceStyles;
 
     private Set<String> artPieceTextLanguages;
-
-    private Set<String> artPiecePhotoUrls;
 }

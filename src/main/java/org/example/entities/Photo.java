@@ -17,7 +17,17 @@ public class Photo {
     private Long id;
 
     @Column
-    private String photoUrl;
+    private String fileName;
+
+    @Column
+    private String contentType;
+
+    @Column
+    private Long sizeBytes;
+
+    @Lob
+    @Column(name = "data", nullable = false, columnDefinition = "LONGBLOB")
+    private byte[] imageData;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "art_piece_id")

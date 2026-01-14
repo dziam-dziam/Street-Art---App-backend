@@ -66,21 +66,20 @@ public class ArtPiece {
     @JoinColumn(name = "location_id")
     private Location artPieceLocation;
 
-    public void addPhoto(String photoUrl){
-        if (photoUrl == null) throw new IllegalArgumentException("Photo URL is null");
-        Photo artPiecePhoto = Photo.builder()
-                .photoUrl(photoUrl)
-                .artPieceOnPhoto(this)
-                .build();
+    public void addPhoto(Photo photo) {
+        if (photo == null) throw new IllegalArgumentException("Photo is null");
 
-        artPiecePhotos.add(artPiecePhoto);
+        artPiecePhotos.add(photo);
+        photo.setArtPieceOnPhoto(this);
     }
 
     public void removePhoto(Photo photo) {
         if (photo == null) throw new IllegalArgumentException("Photo is null");
+
         artPiecePhotos.remove(photo);
         photo.setArtPieceOnPhoto(null);
     }
+
 
 
     @Override
