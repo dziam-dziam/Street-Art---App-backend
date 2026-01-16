@@ -6,7 +6,7 @@ import org.example.dtos.artpiece.UpdateArtPieceDto;
 import org.example.entities.ArtPiece;
 import org.example.entities.District;
 import org.example.entities.Location;
-import org.example.exceptions.ArtPieceNotFoundException;
+import org.example.exceptions.ArtPieceNotFoundByIdException;
 import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.exceptions.LocationAlreadyOccupiedException;
 import org.example.mappers.ArtPieceMapper;
@@ -28,7 +28,7 @@ public class UpdateArtPieceService {
 
     public ArtPieceDto updateArtPieceById(Long artPieceId, UpdateArtPieceDto updatedArtPieceDto) {
         ArtPiece artPieceToBeUpdated = artPieceRepository.findById(artPieceId)
-                .orElseThrow(() -> new ArtPieceNotFoundException(artPieceId));
+                .orElseThrow(() -> new ArtPieceNotFoundByIdException(artPieceId));
 
         String updatedArtPieceDtoAddress = updatedArtPieceDto.getArtPieceAddress();
 
