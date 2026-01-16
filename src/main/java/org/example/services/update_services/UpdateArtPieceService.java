@@ -34,12 +34,12 @@ public class UpdateArtPieceService {
 
         String updatedArtPieceDtoCityName = updatedArtPieceDto.getArtPieceCity();
 
-        Location artPieceLocation = locationMapper.mapAddressToLocationEntity(updatedArtPieceDtoAddress, updatedArtPieceDtoCityName);
+        Location updatedArtPieceDtoLocation = locationMapper.mapAddressToLocationEntity(updatedArtPieceDtoAddress, updatedArtPieceDtoCityName);
 
-        if (artPieceLocation.getId() == null) {
-            artPieceLocation = locationRepository.save(artPieceLocation);
+        if (updatedArtPieceDtoLocation.getId() == null) {
+            updatedArtPieceDtoLocation = locationRepository.save(updatedArtPieceDtoLocation);
         } else throw new LocationAlreadyOccupiedException(artPieceRepository.getArtPiecesByLocationLatitudeAndLongitude
-                (artPieceLocation.getLocationLatitude(), artPieceLocation.getLocationLongitude()), artPieceLocation);
+                (updatedArtPieceDtoLocation.getLocationLatitude(), updatedArtPieceDtoLocation.getLocationLongitude()), updatedArtPieceDtoLocation);
 
         String artPieceDtoDistrictName = updatedArtPieceDto.getArtPieceDistrict();
         District updatedArtPieceDistrictEntity = districtRepository.findByDistrictName(artPieceDtoDistrictName)
@@ -54,7 +54,7 @@ public class UpdateArtPieceService {
         artPieceToBeUpdated.setArtPieceTypes(updatedArtPieceDto.getArtPieceTypes());
         artPieceToBeUpdated.setArtPieceStyles(updatedArtPieceDto.getArtPieceStyles());
         artPieceToBeUpdated.setArtPieceTextLanguages(updatedArtPieceDto.getArtPieceTextLanguages());
-        artPieceToBeUpdated.setArtPieceLocation(artPieceLocation);
+        artPieceToBeUpdated.setArtPieceLocation(updatedArtPieceDtoLocation);
 
         artPieceRepository.save(artPieceToBeUpdated);
 

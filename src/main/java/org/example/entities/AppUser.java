@@ -44,6 +44,7 @@ public class AppUser {
     private List<ArtPiece> appUserArtPiecesAdded;
 
     @OneToMany(mappedBy = "commutingAppUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @Builder.Default
     private Set<Commute> appUserCommutes = new HashSet<>();
 
     @ManyToOne()
