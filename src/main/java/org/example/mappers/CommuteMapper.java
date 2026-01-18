@@ -20,7 +20,7 @@ public class CommuteMapper {
     public Commute mapCommuteDtoToCommuteEntities(CommuteDto commuteDto, AppUser commutingAppUserEntity) {
         if (commuteDto == null) throw new IllegalArgumentException("CommuteDto is null");
         if (commuteDto.getCommuteThroughDistrictName() == null)
-            throw new IllegalArgumentException("CommuteThroughDistrictName id null");
+            throw new IllegalArgumentException("CommuteThroughDistrictName is null");
 
         String commuteThroughDistrictName = commuteDto.getCommuteThroughDistrictName();
         District commuteThroughDistrictEntity = districtRepository.findByDistrictName(commuteThroughDistrictName)
