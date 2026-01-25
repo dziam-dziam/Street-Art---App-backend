@@ -37,6 +37,8 @@ public class AuthUserController {
     private final SecurityContextRepository securityContextRepository =
             new HttpSessionSecurityContextRepository();
 
+    //TODO finals
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterAppUserDto registerAppUserDto) {
         if (appUserRepository.findByAppUserEmail(registerAppUserDto.getAppUserEmail()).isPresent()) {

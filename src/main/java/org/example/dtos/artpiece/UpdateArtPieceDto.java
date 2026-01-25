@@ -19,7 +19,7 @@ public class UpdateArtPieceDto {
 
     private String artPieceName;
 
-    private boolean artPieceContainsText;
+    private Boolean artPieceContainsText;
 
     private String artPiecePosition;
 

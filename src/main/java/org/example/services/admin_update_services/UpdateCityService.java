@@ -1,6 +1,7 @@
 package org.example.services.admin_update_services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.city.CityAdminDto;
 import org.example.dtos.city.CityDto;
 import org.example.dtos.city.UpdateCityDto;
 import org.example.entities.City;
@@ -16,7 +17,7 @@ public class UpdateCityService {
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
 
-    public CityDto updateCityById(Long cityId, UpdateCityDto updateCityDto){
+    public CityAdminDto updateCityById(Long cityId, UpdateCityDto updateCityDto) {
         City cityEntityToBeUpdated = cityRepository.findById(cityId)
                 .orElseThrow(() -> new CityNotFoundByIdException(cityId));
 
@@ -25,7 +26,6 @@ public class UpdateCityService {
 
         cityRepository.save(cityEntityToBeUpdated);
 
-
-        return cityMapper.mapCityEntityToCityDto(cityEntityToBeUpdated);
+        return cityMapper.mapCityEntityToAdminDto(cityEntityToBeUpdated);
     }
 }

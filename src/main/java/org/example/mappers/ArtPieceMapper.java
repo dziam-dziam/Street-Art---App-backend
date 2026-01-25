@@ -2,6 +2,7 @@ package org.example.mappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.example.dtos.artpiece.ArtPieceAdminDto;
 import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.ResponseArtPieceDto;
 import org.example.dtos.photo.PhotoResponseDto;
@@ -20,6 +21,7 @@ public class ArtPieceMapper {
     private final GetDistrictByNameService getDistrictByNameService;
     private final LocationMapper locationMapper;
 
+    //TODO finals
     public ArtPiece mapArtPieceDtoToArtPieceEntity(ArtPieceDto artPieceDto) {
         if (artPieceDto == null) throw new IllegalArgumentException("ArtPieceDto is null");
         if (artPieceDto.getArtPieceDistrict() == null)
@@ -31,7 +33,7 @@ public class ArtPieceMapper {
         return ArtPiece.builder()
                 .artPieceAddress(artPieceDto.getArtPieceAddress())
                 .artPieceName(artPieceDto.getArtPieceName())
-                .artPieceContainsText(artPieceDto.isArtPieceContainsText())
+                .artPieceContainsText(artPieceDto.getArtPieceContainsText())
                 .artPiecePosition(artPieceDto.getArtPiecePosition())
                 .artPieceUserDescription(artPieceDto.getArtPieceUserDescription())
                 .artPieceDistrict(districtFromDto)
@@ -57,7 +59,7 @@ public class ArtPieceMapper {
                 .artPieceCity(artPieceEntityCityName)
                 .artPieceAddress(artPieceEntity.getArtPieceAddress())
                 .artPieceName(artPieceEntity.getArtPieceName())
-                .artPieceContainsText(artPieceEntity.isArtPieceContainsText())
+                .artPieceContainsText(artPieceEntity.getArtPieceContainsText())
                 .artPiecePosition(artPieceEntity.getArtPiecePosition())
                 .artPieceDistrict(artPieceEntityDistrictName)
                 .artPieceStyles(artPieceEntity.getArtPieceStyles())
@@ -91,6 +93,19 @@ public class ArtPieceMapper {
                 .artPieceName(artPieceEntity.getArtPieceName())
                 .artPieceTypes(artPieceEntity.getArtPieceTypes())
                 .artPiecePhotos(mapPhotoEntitiesToPhotoResponseDtos(artPieceEntity))
+                .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
+                .build();
+    }
+
+    public ArtPieceAdminDto mapArtPieceEntityToAdminDto(ArtPiece artPieceEntity){
+        if (artPieceEntity == null){
+            throw new IllegalArgumentException("Artpiece entity is null");
+        }
+
+        return ArtPieceAdminDto.builder()
+                .id(artPieceEntity.getId())
+                .artPieceAddress(artPieceEntity.getArtPieceAddress())
+                .artPieceName(artPieceEntity.getArtPieceName())
                 .artPieceUserDescription(artPieceEntity.getArtPieceUserDescription())
                 .build();
     }

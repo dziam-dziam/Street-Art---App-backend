@@ -1,6 +1,7 @@
 package org.example.services.admin_update_services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.district.DistrictAdminDto;
 import org.example.dtos.district.DistrictDto;
 import org.example.dtos.district.UpdateDistrictDto;
 import org.example.entities.City;
@@ -20,12 +21,13 @@ public class UpdateDistrictService {
     private final CityRepository cityRepository;
     private final DistrictMapper districtMapper;
 
-    public DistrictDto updateDistrictById(Long districtId, UpdateDistrictDto updateDistrictDto) {
+    //TODO finals
+    public DistrictAdminDto updateDistrictById(Long districtId, UpdateDistrictDto updateDistrictDto) {
         District districtToBeUpdated = districtRepository.findById(districtId)
                 .orElseThrow(() -> new DistrictNotFoundByIdException(districtId));
         String updateDistrictDtoCityName = updateDistrictDto.getDistrictCity();
         City updateDistrictDtoCityEntity = cityRepository.findByCityName(updateDistrictDtoCityName)
-                        .orElseThrow(() -> new CityNotFoundByNameException(updateDistrictDtoCityName));
+                .orElseThrow(() -> new CityNotFoundByNameException(updateDistrictDtoCityName));
 
         districtToBeUpdated.setDistrictName(updateDistrictDto.getDistrictName());
         districtToBeUpdated.setDistrictCity(updateDistrictDtoCityEntity);
@@ -34,6 +36,6 @@ public class UpdateDistrictService {
 
         districtRepository.save(districtToBeUpdated);
 
-        return districtMapper.mapDistrictEntityToDistrictDto(districtToBeUpdated);
+        return districtMapper.mapDistrictEntityToAdminDto(districtToBeUpdated);
     }
 }

@@ -26,6 +26,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AddCommuteServiceTest {
 
+    //TODO private pola!
+
     @Mock
     AppUserRepository appUserRepository;
 

@@ -1,6 +1,7 @@
 package org.example.controllers.admin_update_controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.district.DistrictAdminDto;
 import org.example.dtos.district.DistrictDto;
 import org.example.dtos.district.UpdateDistrictDto;
 import org.example.services.admin_update_services.UpdateDistrictService;
@@ -13,7 +14,7 @@ public class UpdateDistrictController {
     private final UpdateDistrictService updateDistrictService;
 
     @PutMapping("district/{id}")
-    public DistrictDto updateDistrict(@PathVariable Long id, @RequestBody UpdateDistrictDto updateDistrictDto){
+    public DistrictAdminDto updateDistrict(@PathVariable Long id, @RequestBody UpdateDistrictDto updateDistrictDto){
         return updateDistrictService.updateDistrictById(id,updateDistrictDto);
     }
 }

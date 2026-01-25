@@ -17,6 +17,7 @@ public class CommuteMapper {
 
     private final DistrictRepository districtRepository;
 
+    //TODO finals
     public Commute mapCommuteDtoToCommuteEntities(CommuteDto commuteDto, AppUser commutingAppUserEntity) {
         if (commuteDto == null) throw new IllegalArgumentException("CommuteDto is null");
         if (commuteDto.getCommuteThroughDistrictName() == null)

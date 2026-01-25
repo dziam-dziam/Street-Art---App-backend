@@ -1,5 +1,6 @@
 package org.example.services.admin_update_services;
 
+import org.example.dtos.district.DistrictAdminDto;
 import org.example.dtos.district.DistrictDto;
 import org.example.dtos.district.UpdateDistrictDto;
 import org.example.entities.City;
@@ -52,19 +53,18 @@ class UpdateDistrictServiceTest {
                 .districtResidentsCount(1L)
                 .build();
 
-        DistrictDto mappedDto = DistrictDto.builder()
+        DistrictAdminDto mappedDto = DistrictAdminDto.builder()
                 .districtName("Nowa Nazwa")
                 .districtCity("Warszawa")
                 .districtZipCode("00-001")
-                .districtResidentsCount(12345L)
                 .build();
 
         when(districtRepository.findById(districtId)).thenReturn(Optional.of(district));
         when(cityRepository.findByCityName("Warszawa")).thenReturn(Optional.of(city));
-        when(districtMapper.mapDistrictEntityToDistrictDto(district)).thenReturn(mappedDto);
+        when(districtMapper.mapDistrictEntityToAdminDto(district)).thenReturn(mappedDto);
 
         // when
-        DistrictDto result = updateDistrictService.updateDistrictById(districtId, dto);
+        DistrictAdminDto result = updateDistrictService.updateDistrictById(districtId, dto);
 
         // then — sprawdzamy, że encja została zmieniona
         assertEquals("Nowa Nazwa", district.getDistrictName());
@@ -77,13 +77,12 @@ class UpdateDistrictServiceTest {
         assertEquals("Nowa Nazwa", result.getDistrictName());
         assertEquals("Warszawa", result.getDistrictCity());
         assertEquals("00-001", result.getDistrictZipCode());
-        assertEquals(12345L, result.getDistrictResidentsCount());
 
         // verify flow
         verify(districtRepository).findById(districtId);
         verify(cityRepository).findByCityName("Warszawa");
         verify(districtRepository).save(district);
-        verify(districtMapper).mapDistrictEntityToDistrictDto(district);
+        verify(districtMapper).mapDistrictEntityToAdminDto(district);
         verifyNoMoreInteractions(districtRepository, cityRepository, districtMapper);
     }
 

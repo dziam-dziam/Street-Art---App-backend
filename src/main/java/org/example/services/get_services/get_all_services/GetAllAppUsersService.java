@@ -1,6 +1,7 @@
 package org.example.services.get_services.get_all_services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.app_user.AppUserAdminDto;
 import org.example.dtos.app_user.AppUserDto;
 import org.example.entities.AppUser;
 import org.example.mappers.AppUserMapper;
@@ -17,11 +18,12 @@ public class GetAllAppUsersService {
     private final AppUserRepository appUserRepository;
     private final AppUserMapper appUserMapper;
 
-    public List<AppUserDto> getAllAppUsers() {
-        List<AppUserDto> appUserDtos = new ArrayList<>();
+    //TODO finals
+    public List<AppUserAdminDto> getAllAppUsers() {
+        List<AppUserAdminDto> appUserDtos = new ArrayList<>();
         List<AppUser> appUserEntities = appUserRepository.findAll();
         for (AppUser appUserEntity : appUserEntities) {
-            AppUserDto appUserDto = appUserMapper.mapAppUserEntityToAppUserDto(appUserEntity);
+            AppUserAdminDto appUserDto = appUserMapper.mapAppUserEntityToAdminDto(appUserEntity);
             appUserDtos.add(appUserDto);
         }
         return appUserDtos;

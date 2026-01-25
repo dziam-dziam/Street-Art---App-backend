@@ -23,6 +23,8 @@ public class GetAllCitiesService {
     private final DistrictMapper districtMapper;
     private final CityMapper cityMapper;
 
+    //TODO finals
+    //TODO i mysle jak to uproscic, wydzieic do osobnej metody by tak makaronu nie bylo "petli w petli i tam sie cos dzieje"
     public List<CityDto> getAllCities() {
         List<CityDto> cityDtos = new ArrayList<>();
         List<City> cityEntities = cityRepository.findAll();

@@ -2,6 +2,8 @@ package org.example.services;
 
 import org.example.entities.ArtPiece;
 import org.example.entities.Photo;
+import org.example.exceptions.ArtPieceNotFoundByIdException;
+import org.example.exceptions.PhotoNotFoundByIdException;
 import org.example.repositories.ArtPieceRepository;
 import org.example.repositories.PhotoRepository;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -70,6 +72,27 @@ class PhotoServiceTest {
     }
 
     @Test
+    void should_upload_photo_with_default_content_type_when_null() throws IOException {
+        Long artPieceId = 2L;
+        ArtPiece artPiece = ArtPiece.builder().id(artPieceId).build();
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "no-type.bin",
+                null,
+                "xyz".getBytes(StandardCharsets.UTF_8)
+        );
+
+        when(artPieceRepository.findById(artPieceId)).thenReturn(Optional.of(artPiece));
+        when(photoRepository.save(any(Photo.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Photo saved = photoService.uploadPhotoToArtPiece(artPieceId, file);
+
+        assertEquals("application/octet-stream", saved.getContentType());
+    }
+
+
+    @Test
     void should_throw_when_upload_photo_art_piece_not_found() {
         // given
         Long artPieceId = 999L;
@@ -80,10 +103,10 @@ class PhotoServiceTest {
         when(artPieceRepository.findById(artPieceId)).thenReturn(Optional.empty());
 
         // when + then
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+        ArtPieceNotFoundByIdException exception = assertThrows(ArtPieceNotFoundByIdException.class,
                 () -> photoService.uploadPhotoToArtPiece(artPieceId, file));
 
-        assertTrue(exception.getMessage().contains("ArtPiece not found"));
+        assertTrue(exception.getMessage().contains("Art piece with id: " + artPieceId + " was not found"));
         verify(photoRepository, never()).save(any());
     }
 
@@ -94,10 +117,10 @@ class PhotoServiceTest {
         when(photoRepository.findById(photoId)).thenReturn(Optional.empty());
 
         // when + then
-        NoSuchElementException ex = assertThrows(NoSuchElementException.class,
+        PhotoNotFoundByIdException ex = assertThrows(PhotoNotFoundByIdException.class,
                 () -> photoService.getPhoto(photoId));
 
-        assertTrue(ex.getMessage().contains("Photo not found"));
+        assertTrue(ex.getMessage().contains("Photo with id: " + photoId + " was not found"));
         verify(photoRepository).findById(photoId);
     }
 

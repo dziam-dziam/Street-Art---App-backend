@@ -14,6 +14,8 @@ public class DeletePhotoController {
 
     private final PhotoService photoService;
 
+    //TODO dobrze by bylo dla tej voidówki dac info ze sie udalo lub nie usuwanie dla uzytkownika jezeli on tym
+    // manewruje
     @DeleteMapping("/{photoId}")
     public void delete(@PathVariable Long photoId) {
         photoService.deletePhoto(photoId);

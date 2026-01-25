@@ -25,11 +25,13 @@ public class AddArtPieceService {
     private final ArtPieceMapper artPieceMapper;
     private final DistrictRepository districtRepository;
 
+    //TODO dodaj final do zmiennych
     public ArtPieceDto createArtPiece(AddArtPieceDto addArtPieceDto) {
         if (addArtPieceDto == null) throw new IllegalArgumentException("AddArtPieceDto is null");
         if (addArtPieceDto.getArtPieceAddress() == null)
             throw new IllegalArgumentException("AddArtPieceDto address is null");
 
+        //TODO po co wyniesione do zmiennej?
         String artPieceDtoAddress = addArtPieceDto.getArtPieceAddress();
 
         String addArtPieceDtoCityName = addArtPieceDto.getArtPieceCity();
@@ -50,7 +52,7 @@ public class AddArtPieceService {
                 .artPieceName(addArtPieceDto.getArtPieceName())
                 .artPieceStyles(addArtPieceDto.getArtPieceStyles())
                 .artPieceTypes(addArtPieceDto.getArtPieceTypes())
-                .artPieceContainsText(addArtPieceDto.isArtPieceContainsText())
+                .artPieceContainsText(addArtPieceDto.getArtPieceContainsText())
                 .artPiecePosition(addArtPieceDto.getArtPiecePosition())
                 .artPieceCity(addArtPieceDtoCityName)
                 .artPieceTextLanguages(addArtPieceDto.getArtPieceTextLanguages())
@@ -63,7 +65,6 @@ public class AddArtPieceService {
         artPieceLocation.addArtPiece(artPiece);
         artPieceLocation.setLocationDistrict(artPieceDtoDistrictEntity);
         artPieceDtoDistrictEntity.addArtPiece(artPiece);
-
 
         ArtPiece saved = artPieceRepository.save(artPiece);
 

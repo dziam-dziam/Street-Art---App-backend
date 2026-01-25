@@ -18,6 +18,7 @@ public class RegisterAppUserService {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
 
+    //TODO finals
     public AppUserDto registerAppUser(RegisterAppUserDto registerAppUserDto) {
         if (registerAppUserDto == null) throw new IllegalArgumentException("RegisterAppUserDto is null");
 

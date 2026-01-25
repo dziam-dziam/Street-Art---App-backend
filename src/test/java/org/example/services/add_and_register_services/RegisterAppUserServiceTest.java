@@ -22,6 +22,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RegisterAppUserServiceTest {
 
+    //TODO private pola!
+
     @Mock AppUserMapper appUserMapper;
     @Mock AppUserRepository appUserRepository;
     @Mock PasswordEncoder passwordEncoder;

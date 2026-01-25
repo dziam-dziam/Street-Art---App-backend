@@ -20,6 +20,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RegisterCityServiceTest {
 
+    //TODO private pola!
+
     @Mock CityRepository cityRepository;
     @Mock CityMapper cityMapper;
 

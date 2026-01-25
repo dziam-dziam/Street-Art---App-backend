@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AddArtPieceServiceTest {
 
+    //TODO private pola!
     @Mock LocationRepository locationRepository;
     @Mock LocationMapper locationMapper;
     @Mock ArtPieceRepository artPieceRepository;

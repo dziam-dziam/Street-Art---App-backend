@@ -19,6 +19,7 @@ public class AddCommuteService {
     private final CommuteMapper commuteMapper;
     private final CommuteRepository commuteRepository;
 
+    //TODO finals
     public CommuteDto addCommute(AddCommuteDto addCommuteDto, String commutingAppUserEmail) {
         if (addCommuteDto == null) throw new IllegalArgumentException("AddCommuteDto is null");
         AppUser appUserWithCommute = appUserRepository.findByAppUserEmail(commutingAppUserEmail)

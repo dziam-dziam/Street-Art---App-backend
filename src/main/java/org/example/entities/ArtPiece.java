@@ -27,7 +27,7 @@ public class ArtPiece {
     @Column
     private String artPieceName;
     @Column
-    private boolean artPieceContainsText;
+    private Boolean artPieceContainsText;
     @Column
     private String artPiecePosition;
     @ColumnDefault("'Lack of description'")
@@ -79,8 +79,6 @@ public class ArtPiece {
         artPiecePhotos.remove(photo);
         photo.setArtPieceOnPhoto(null);
     }
-
-
 
     @Override
     public final boolean equals(Object object) {

@@ -17,15 +17,17 @@ public class UploadPhotoController {
     @PostMapping(value = "/{artPieceId}/photos", consumes = "multipart/form-data")
     public PhotoResponseDto uploadPhoto(@PathVariable Long artPieceId,
                                    @RequestParam("image") MultipartFile file) throws Exception {
-
-        Photo saved = photoService.uploadPhotoToArtPiece(artPieceId, file);
-
-        return PhotoResponseDto.builder()
-                .id(saved.getId())
-                .fileName(saved.getFileName())
-                .contentType(saved.getContentType())
-                .sizeBytes(saved.getSizeBytes())
-                .downloadUrl("/api/photos/" + saved.getId())
-                .build();
+        try{
+            Photo saved = photoService.uploadPhotoToArtPiece(artPieceId, file);
+            return PhotoResponseDto.builder()
+                    .id(saved.getId())
+                    .fileName(saved.getFileName())
+                    .contentType(saved.getContentType())
+                    .sizeBytes(saved.getSizeBytes())
+                    .downloadUrl("/api/photos/" + saved.getId())
+                    .build();
+        }catch (Exception exception){
+            throw new Exception("There was an issue at uploading photo");
+        }
     }
 }

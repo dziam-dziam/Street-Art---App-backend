@@ -2,6 +2,7 @@ package org.example.mappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.example.dtos.district.DistrictAdminDto;
 import org.example.dtos.district.DistrictDto;
 import org.example.entities.City;
 import org.example.entities.District;
@@ -18,6 +19,7 @@ public class DistrictMapper {
     private final DistrictRepository districtRepository;
     private final CityRepository cityRepository;
 
+    //TODO finals
     public District mapDistrictDtoToDistrictEntity(DistrictDto districtDto) {
         if (districtDto == null) throw new IllegalArgumentException("DistrictDto is null");
 
@@ -46,6 +48,21 @@ public class DistrictMapper {
                 .districtName(districtEntity.getDistrictName())
                 .districtArtPiecesCount(districtEntity.getDistrictArtPiecesCount())
                 .districtResidentsCount(districtEntity.getDistrictResidentsCount())
+                .build();
+    }
+
+    public DistrictAdminDto mapDistrictEntityToAdminDto(District districtEntity){
+        if (districtEntity == null){
+            throw new IllegalArgumentException("District entity is null");
+        }
+
+        String entityDistrictCityName = districtEntity.getDistrictCity().getCityName();
+
+        return DistrictAdminDto.builder()
+                .id(districtEntity.getId())
+                .districtCity(entityDistrictCityName)
+                .districtName(districtEntity.getDistrictName())
+                .districtZipCode(districtEntity.getDistrictZipCode())
                 .build();
     }
 }

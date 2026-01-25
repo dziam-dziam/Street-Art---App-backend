@@ -1,6 +1,7 @@
 package org.example.services.get_services.get_all_services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.district.DistrictAdminDto;
 import org.example.dtos.district.DistrictDto;
 import org.example.entities.District;
 import org.example.mappers.DistrictMapper;
@@ -17,11 +18,12 @@ public class GetAllDistrictsService {
     private final DistrictRepository districtRepository;
     private final DistrictMapper districtMapper;
 
-    public List<DistrictDto> getAllDistrict() {
-        List<DistrictDto> districtDtos = new ArrayList<>();
+    //TODO finals
+    public List<DistrictAdminDto> getAllDistrict() {
+        List<DistrictAdminDto> districtDtos = new ArrayList<>();
         List<District> districtEntities = districtRepository.findAll();
         for (District districtEntity : districtEntities) {
-            DistrictDto districtDto = districtMapper.mapDistrictEntityToDistrictDto(districtEntity);
+            DistrictAdminDto districtDto = districtMapper.mapDistrictEntityToAdminDto(districtEntity);
             districtDtos.add(districtDto);
         }
         return districtDtos;

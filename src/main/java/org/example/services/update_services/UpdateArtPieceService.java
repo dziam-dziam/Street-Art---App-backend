@@ -26,31 +26,32 @@ public class UpdateArtPieceService {
     private final DistrictRepository districtRepository;
     private final ArtPieceMapper artPieceMapper;
 
+    //TODO finals
     public ArtPieceDto updateArtPieceById(Long artPieceId, UpdateArtPieceDto updatedArtPieceDto) {
         ArtPiece artPieceToBeUpdated = artPieceRepository.findById(artPieceId)
                 .orElseThrow(() -> new ArtPieceNotFoundByIdException(artPieceId));
 
+        //TODO po co zmienne z geta? bez sensu
         String updatedArtPieceDtoAddress = updatedArtPieceDto.getArtPieceAddress();
-
         String updatedArtPieceDtoCityName = updatedArtPieceDto.getArtPieceCity();
 
-        Location updatedArtPieceDtoLocation = locationMapper.mapAddressToLocationEntity(updatedArtPieceDtoAddress, updatedArtPieceDtoCityName);
 
-        if (updatedArtPieceDtoLocation.getId() == null) {
+        Location updatedArtPieceDtoLocation = locationMapper
+                .mapAddressToLocationEntity(updatedArtPieceDtoAddress, updatedArtPieceDtoCityName);
+
+        //TODO wynies do osobnej metody dobrze opisanej
+
             updatedArtPieceDtoLocation = locationRepository.save(updatedArtPieceDtoLocation);
-        } else throw new LocationAlreadyOccupiedException(artPieceRepository.getArtPiecesByLocationLatitudeAndLongitude
-                (updatedArtPieceDtoLocation.getLocationLatitude(), updatedArtPieceDtoLocation.getLocationLongitude()), updatedArtPieceDtoLocation);
 
-        String artPieceDtoDistrictName = updatedArtPieceDto.getArtPieceDistrict();
-        District updatedArtPieceDistrictEntity = districtRepository.findByDistrictName(artPieceDtoDistrictName)
-                .orElseThrow(() -> new DistrictNotFoundByNameException(artPieceDtoDistrictName));
+//        String artPieceDtoDistrictName = updatedArtPieceDto.getArtPieceDistrict();
+//        District updatedArtPieceDistrictEntity = districtRepository.findByDistrictName(artPieceDtoDistrictName)
+//                .orElseThrow(() -> new DistrictNotFoundByNameException(artPieceDtoDistrictName));
 
 
         artPieceToBeUpdated.setArtPieceAddress(updatedArtPieceDtoAddress);
         artPieceToBeUpdated.setArtPieceName(updatedArtPieceDto.getArtPieceName());
-        artPieceToBeUpdated.setArtPieceContainsText(updatedArtPieceDto.isArtPieceContainsText());
         artPieceToBeUpdated.setArtPieceUserDescription(updatedArtPieceDto.getArtPieceUserDescription());
-        artPieceToBeUpdated.setArtPieceDistrict(updatedArtPieceDistrictEntity);
+//        artPieceToBeUpdated.setArtPieceDistrict(updatedArtPieceDistrictEntity);
         artPieceToBeUpdated.setArtPieceTypes(updatedArtPieceDto.getArtPieceTypes());
         artPieceToBeUpdated.setArtPieceStyles(updatedArtPieceDto.getArtPieceStyles());
         artPieceToBeUpdated.setArtPieceTextLanguages(updatedArtPieceDto.getArtPieceTextLanguages());

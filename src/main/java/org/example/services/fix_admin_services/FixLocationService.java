@@ -14,9 +14,12 @@ public class FixLocationService {
 
     private final LocationRepository locationRepository;
 
-    public Location fixInvalidLocation(double locationLongitude, double locationLatitude, UpdateLocationDto updateLocationDto){
-        Location locationToBeFixed = locationRepository.findByLocationLatitudeAndLocationLongitude(locationLatitude,locationLongitude)
-                .orElseThrow(() -> new LocationNotFoundByLonLatException(locationLatitude,locationLongitude));
+    //TODO finale!
+    public Location fixInvalidLocation(double locationLongitude, double locationLatitude,
+                                       UpdateLocationDto updateLocationDto) {
+        Location locationToBeFixed = locationRepository
+                .findByLocationLatitudeAndLocationLongitude(locationLatitude, locationLongitude)
+                .orElseThrow(() -> new LocationNotFoundByLonLatException(locationLatitude, locationLongitude));
 
         double newLocationLatitude = updateLocationDto.getLocationLatitude();
         double newLocationLongitude = updateLocationDto.getLocationLongitude();

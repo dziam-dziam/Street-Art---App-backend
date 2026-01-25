@@ -1,10 +1,8 @@
 USE `streetart`;
 
--- CITY
 INSERT INTO city (city_name, city_residents_count)
 VALUES ('Poznań', 135000);
 
--- DISTRICTS (podpinamy po city_id znalezionym po nazwie miasta)
 INSERT INTO district (
   district_name,
   district_zip_code,

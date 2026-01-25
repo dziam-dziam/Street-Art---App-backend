@@ -17,6 +17,7 @@ public class GetJezyceArtPiecesService {
     private final ArtPieceRepository artPieceRepository;
     private final ArtPieceMapper artPieceMapper;
 
+    //TODO finals
     public List<ResponseArtPieceDto> getJezyceArtpieces(){
         List<ArtPiece> jezyceArtPieces = artPieceRepository.getArtPiecesFromDistrict("Jeżyce");
         List<ResponseArtPieceDto> jezyceArtPiecesResponseDtos = new ArrayList<>();

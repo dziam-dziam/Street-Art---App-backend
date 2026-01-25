@@ -18,7 +18,7 @@ public class AddArtPieceDto {
 
     private String artPieceName;
 
-    private boolean artPieceContainsText;
+    private Boolean artPieceContainsText;
 
     private String artPiecePosition;
 

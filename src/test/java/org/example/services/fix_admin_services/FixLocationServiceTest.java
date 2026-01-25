@@ -17,11 +17,15 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class FixLocationServiceTest {
 
+    //TODO private pola!
+
     @Mock
     LocationRepository locationRepository;
 
     @InjectMocks
     FixLocationService fixLocationService;
+
+    //TODO dodaj case jezeli sie nie uda
 
     @Test
     void should_fix_invalid_location_and_save() {

@@ -20,6 +20,7 @@ public class LocationMapper {
     private final LocationRepository locationRepository;
     private final int SCALE_OF_ROUNDING = 6;
 
+    //TODO finals
     public Location mapAddressToLocationEntity(String address, String city) {
         if (address == null || address.isBlank()) throw new IllegalArgumentException("Address is null/blank");
 

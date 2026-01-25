@@ -20,6 +20,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RegisterDistrictServiceTest {
 
+    //TODO private pola!
+
     @Mock DistrictRepository districtRepository;
     @Mock DistrictMapper districtMapper;
 

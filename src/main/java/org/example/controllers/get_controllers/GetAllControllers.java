@@ -1,8 +1,11 @@
 package org.example.controllers.get_controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.app_user.AppUserAdminDto;
+import org.example.dtos.artpiece.ArtPieceAdminDto;
 import org.example.dtos.artpiece.ResponseArtPieceDto;
 import org.example.dtos.city.CityDto;
+import org.example.dtos.district.DistrictAdminDto;
 import org.example.dtos.district.DistrictDto;
 import org.example.dtos.app_user.AppUserDto;
 import org.example.services.get_services.get_all_services.GetAllAppUsersService;
@@ -31,18 +34,18 @@ public class GetAllControllers {
     }
 
     @GetMapping("/districts")
-    public List<DistrictDto> getAllDistrict() {
+    public List<DistrictAdminDto> getAllDistrict() {
         return getAllDistrictsService.getAllDistrict();
     }
 
 
     @GetMapping("/artPieces")
-    public List<ResponseArtPieceDto> getAllArtPieces() {
+    public List<ArtPieceAdminDto> getAllArtPieces() {
         return getAllArtPiecesService.getAllArtPieces();
     }
 
     @GetMapping("/appUsers")
-    public List<AppUserDto> getAllAppUsers() {
+    public List<AppUserAdminDto> getAllAppUsers() {
         return getAllAppUsersService.getAllAppUsers();
     }
 

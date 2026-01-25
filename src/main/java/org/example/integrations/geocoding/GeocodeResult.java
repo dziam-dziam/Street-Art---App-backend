@@ -6,6 +6,9 @@ import lombok.Value;
 @Value
 @Builder
 public class GeocodeResult {
+
+    //TODO zmien moze na record zamiast class jak ci podpowiada
+
     double latitude;
 
     double longitude;

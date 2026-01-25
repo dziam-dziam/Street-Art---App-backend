@@ -28,6 +28,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UpdateArtPieceServiceTest {
 
+    //TODO private pola!
+
     @Mock
     ArtPieceRepository artPieceRepository;
 

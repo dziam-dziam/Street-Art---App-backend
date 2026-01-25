@@ -12,26 +12,12 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArtPieceDto {
+public class ArtPieceAdminDto {
+    private Long id;
+
     private String artPieceAddress;
 
     private String artPieceName;
 
-    private Boolean artPieceContainsText;
-
-    private String artPiecePosition;
-
     private String artPieceUserDescription;
-
-    private String artPieceDistrict;
-
-    private String artPieceCity;
-
-    private Set<ArtPieceTypes> artPieceTypes;
-
-    private Set<ArtPieceStyles> artPieceStyles;
-
-    private Set<String> artPieceTextLanguages;
-
-    private Set<PhotoResponseDto> artPiecePhotos;
 }

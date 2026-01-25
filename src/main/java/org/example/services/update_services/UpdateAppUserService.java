@@ -32,23 +32,30 @@ public class UpdateAppUserService {
     private final DistrictRepository districtRepository;
     private final AppUserMapper appUserMapper;
 
+    //TODO finals
     public AppUserDto updateAppUserByEmail(UpdateAppUserDto updateUserDto, String appUserBeingUpdatedEmail) {
 
         AppUser appUserBeingUpdated = appUserRepository.findByAppUserEmail(appUserBeingUpdatedEmail)
                 .orElseThrow(() -> new AppUserNotFoundByEmailException(appUserBeingUpdatedEmail));
 
+        //TODO po co zmienna z geta? bez sensu
         String updatedCityName = updateUserDto.getAppUserCity();
-        City updatedCityEntity = cityRepository.findByCityName(updatedCityName)
-                .orElseThrow(() -> new CityNotFoundByNameException(updatedCityName));
-        String updatedDistrictName = updateUserDto.getAppUserLiveInDistrict();
-        District updatedDistrictEntity = districtRepository.findByDistrictName(updatedDistrictName)
-                .orElseThrow(() -> new DistrictNotFoundByNameException(updatedDistrictName));
 
+//        City updatedCityEntity = cityRepository.findByCityName(updatedCityName)
+//                .orElseThrow(() -> new CityNotFoundByNameException(updatedCityName));
+//        String updatedDistrictName = updateUserDto.getAppUserLiveInDistrict();
+//        District updatedDistrictEntity = districtRepository.findByDistrictName(updatedDistrictName)
+//                .orElseThrow(() -> new DistrictNotFoundByNameException(updatedDistrictName));
+
+        //TODO po co zmienna z geta? bez sensu
         Set<CommuteDto> updatedCommuteDtos = updateUserDto.getAppUserCommuteDtos();
+
+        //TODO wynies ten fragment kodu do metody dobrze opisanej
         Set<Commute> updatedCommuteEntities = new HashSet<>();
         if (updatedCommuteDtos != null) {
             for (CommuteDto commuteDto : updatedCommuteDtos) {
-                Commute updatedCommuteEntity = commuteMapper.mapCommuteDtoToCommuteEntities(commuteDto, appUserBeingUpdated);
+                Commute updatedCommuteEntity = commuteMapper
+                        .mapCommuteDtoToCommuteEntities(commuteDto, appUserBeingUpdated);
                 updatedCommuteEntities.add(updatedCommuteEntity);
             }
         }
@@ -56,8 +63,8 @@ public class UpdateAppUserService {
         appUserBeingUpdated.setAppUserName(updateUserDto.getAppUserName());
         appUserBeingUpdated.setAppUserPassword(updateUserDto.getAppUserPassword());
         appUserBeingUpdated.setAppUserEmail(updateUserDto.getAppUserEmail());
-        appUserBeingUpdated.setAppUserCity(updatedCityEntity);
-        appUserBeingUpdated.setAppUserLiveInDistrict(updatedDistrictEntity);
+//        appUserBeingUpdated.setAppUserCity(updatedCityEntity);
+//        appUserBeingUpdated.setAppUserLiveInDistrict(updatedDistrictEntity);
         appUserBeingUpdated.setAppUserLanguagesSpoken(updateUserDto.getAppUserLanguagesSpoken());
 
         appUserBeingUpdated.getAppUserCommutes().clear();

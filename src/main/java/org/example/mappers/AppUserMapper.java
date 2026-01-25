@@ -2,6 +2,7 @@ package org.example.mappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.example.dtos.app_user.AppUserAdminDto;
 import org.example.dtos.commute.CommuteDto;
 import org.example.dtos.app_user.AppUserDto;
 import org.example.entities.AppUser;
@@ -25,6 +26,7 @@ public class AppUserMapper {
     private final DistrictRepository districtRepository;
     private final CommuteMapper commuteMapper;
 
+    //TODO finals
     public AppUser mapAppUserDtoToAppUserEntity(AppUserDto appUserDto) {
         if (appUserDto == null) throw new IllegalArgumentException("AppUserDto is null");
         if (appUserDto.getAppUserCity() == null || appUserDto.getAppUserCity().isBlank())
@@ -84,6 +86,18 @@ public class AppUserMapper {
                 .build();
     }
 
+    public AppUserAdminDto mapAppUserEntityToAdminDto(AppUser appUserEntity){
+        if (appUserEntity == null){
+            throw new IllegalArgumentException("App user entity is null");
+        }
+
+        return AppUserAdminDto.builder()
+                .id(appUserEntity.getId())
+                .appUserEmail(appUserEntity.getAppUserEmail())
+                .appUserName(appUserEntity.getAppUserName())
+                .build();
+    }
+
     private static String getAppUserEntityCityName(AppUser appUserEntity) {
         if (appUserEntity == null) throw new IllegalArgumentException("AppUserEntity is null");
         if (appUserEntity.getAppUserCity() == null) throw new IllegalArgumentException("AppUserEntity city is null");
@@ -93,4 +107,5 @@ public class AppUserMapper {
         City appUserEntityCity = appUserEntity.getAppUserCity();
         return appUserEntityCity.getCityName();
     }
+
 }

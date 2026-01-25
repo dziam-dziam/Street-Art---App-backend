@@ -1,5 +1,6 @@
 package org.example.services.admin_update_services;
 
+import org.example.dtos.city.CityAdminDto;
 import org.example.dtos.city.CityDto;
 import org.example.dtos.city.UpdateCityDto;
 import org.example.entities.City;
@@ -19,25 +20,27 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UpdateCityServiceTest {
 
+    //TODO private pola!
     @Mock CityRepository cityRepository;
     @Mock CityMapper cityMapper;
 
     @InjectMocks UpdateCityService updateCityService;
 
+    //TODO dodaj case jezeli sie nie uda
+
     @Test
     void should_update_city_by_id() {
-        City city = City.builder().id(1L).cityName("Old").cityResidentsCount(1L).build();
+        City city = City.builder().id(1L).cityName("Old").build();
         when(cityRepository.findById(1L)).thenReturn(Optional.of(city));
 
-        UpdateCityDto updateDto = UpdateCityDto.builder().cityName("New").cityResidentsCount(999L).build();
+        UpdateCityDto updateDto = UpdateCityDto.builder().cityName("New").build();
 
-        CityDto mapped = CityDto.builder().cityName("New").cityResidentsCount(999L).build();
-        when(cityMapper.mapCityEntityToCityDto(city)).thenReturn(mapped);
+        CityAdminDto mapped = CityAdminDto.builder().cityName("New").build();
+        when(cityMapper.mapCityEntityToAdminDto(city)).thenReturn(mapped);
 
-        CityDto result = updateCityService.updateCityById(1L, updateDto);
+        CityAdminDto result = updateCityService.updateCityById(1L, updateDto);
 
         assertEquals("New", city.getCityName());
-        assertEquals(999L, city.getCityResidentsCount());
         assertEquals("New", result.getCityName());
 
         verify(cityRepository).save(city);

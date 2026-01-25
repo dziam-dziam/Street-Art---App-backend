@@ -15,6 +15,7 @@ public class RegisterDistrictService {
     private final DistrictRepository districtRepository;
     private final DistrictMapper districtMapper;
 
+    //TODO finals
     public DistrictDto createDistrict(AddDistrictDto addDistrictDto) {
         if (addDistrictDto == null) throw new IllegalArgumentException("AddDistrictDto is null");
 

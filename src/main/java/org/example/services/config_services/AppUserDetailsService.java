@@ -14,6 +14,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
 
+    //TODO finals
     @Override
     public UserDetails loadUserByUsername(String email) {
         AppUser user = appUserRepository.findByAppUserEmail(email)
@@ -21,7 +22,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getAppUserEmail())
-                .password(user.getAppUserPassword()) // hash
+                .password(user.getAppUserPassword())
                 .roles("USER")
                 .build();
     }

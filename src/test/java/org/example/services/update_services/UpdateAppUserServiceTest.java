@@ -28,6 +28,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UpdateAppUserServiceTest {
 
+    //TODO private pola!
+
     @Mock AppUserRepository appUserRepository;
     @Mock CityRepository cityRepository;
     @Mock CommuteMapper commuteMapper;
@@ -35,6 +37,8 @@ class UpdateAppUserServiceTest {
     @Mock AppUserMapper appUserMapper;
 
     @InjectMocks UpdateAppUserService updateAppUserService;
+
+    //TODO dodaj case jezeli sie nie uda
 
     @Test
     void should_update_user_and_replace_commutes() {
