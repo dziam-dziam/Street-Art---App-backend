@@ -2,7 +2,6 @@ package org.example.services.get_services.get_all_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ArtPieceAdminDto;
-import org.example.dtos.artpiece.ResponseArtPieceDto;
 import org.example.entities.ArtPiece;
 import org.example.mappers.ArtPieceMapper;
 import org.example.repositories.ArtPieceRepository;

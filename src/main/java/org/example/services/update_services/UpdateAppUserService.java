@@ -6,12 +6,8 @@ import org.example.dtos.commute.CommuteDto;
 import org.example.dtos.app_user.AppUserDto;
 import org.example.dtos.app_user.UpdateAppUserDto;
 import org.example.entities.AppUser;
-import org.example.entities.City;
 import org.example.entities.Commute;
-import org.example.entities.District;
 import org.example.exceptions.AppUserNotFoundByEmailException;
-import org.example.exceptions.CityNotFoundByNameException;
-import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.mappers.AppUserMapper;
 import org.example.mappers.CommuteMapper;
 import org.example.repositories.AppUserRepository;
@@ -37,15 +33,6 @@ public class UpdateAppUserService {
 
         AppUser appUserBeingUpdated = appUserRepository.findByAppUserEmail(appUserBeingUpdatedEmail)
                 .orElseThrow(() -> new AppUserNotFoundByEmailException(appUserBeingUpdatedEmail));
-
-        //TODO po co zmienna z geta? bez sensu
-        String updatedCityName = updateUserDto.getAppUserCity();
-
-//        City updatedCityEntity = cityRepository.findByCityName(updatedCityName)
-//                .orElseThrow(() -> new CityNotFoundByNameException(updatedCityName));
-//        String updatedDistrictName = updateUserDto.getAppUserLiveInDistrict();
-//        District updatedDistrictEntity = districtRepository.findByDistrictName(updatedDistrictName)
-//                .orElseThrow(() -> new DistrictNotFoundByNameException(updatedDistrictName));
 
         //TODO po co zmienna z geta? bez sensu
         Set<CommuteDto> updatedCommuteDtos = updateUserDto.getAppUserCommuteDtos();

@@ -1,7 +1,6 @@
 package org.example.services.get_services.get_all_services;
 
 import org.example.dtos.district.DistrictAdminDto;
-import org.example.dtos.district.DistrictDto;
 import org.example.entities.District;
 import org.example.mappers.DistrictMapper;
 import org.example.repositories.DistrictRepository;

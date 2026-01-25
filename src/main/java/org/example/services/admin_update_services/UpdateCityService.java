@@ -2,7 +2,6 @@ package org.example.services.admin_update_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.city.CityAdminDto;
-import org.example.dtos.city.CityDto;
 import org.example.dtos.city.UpdateCityDto;
 import org.example.entities.City;
 import org.example.exceptions.CityNotFoundByIdException;

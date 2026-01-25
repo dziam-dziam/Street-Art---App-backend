@@ -1,9 +1,6 @@
 package org.example.dtos.app_user;
 
 import lombok.*;
-import org.example.dtos.commute.CommuteDto;
-
-import java.util.Set;
 
 @Data
 @Builder

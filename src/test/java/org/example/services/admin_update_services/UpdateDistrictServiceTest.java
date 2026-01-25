@@ -1,7 +1,6 @@
 package org.example.services.admin_update_services;
 
 import org.example.dtos.district.DistrictAdminDto;
-import org.example.dtos.district.DistrictDto;
 import org.example.dtos.district.UpdateDistrictDto;
 import org.example.entities.City;
 import org.example.entities.District;
