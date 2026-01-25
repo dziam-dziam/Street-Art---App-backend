@@ -2,6 +2,7 @@ package org.example.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,6 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/updateAdminDistrict/**").permitAll()
                         .requestMatchers("/updateAppUser/**").permitAll()
                         .requestMatchers("/updateArtPiece/**").permitAll()
+                        .requestMatchers("/map/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/getAll/**").permitAll() // jeśli chcesz
                         .anyRequest().authenticated()
                 );
         return http.build();

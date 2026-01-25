@@ -24,7 +24,6 @@ public class GetAllControllers {
     private final GetAllDistrictsService getAllDistrictsService;
     private final GetAllArtPiecesService getAllArtPiecesService;
     private final GetAllAppUsersService getAllAppUsersService;
-
     @GetMapping("/cities")
     public List<CityDto> getAllCities() {
         return getAllCitiesService.getAllCities();
