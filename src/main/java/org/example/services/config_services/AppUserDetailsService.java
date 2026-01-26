@@ -20,10 +20,13 @@ public class AppUserDetailsService implements UserDetailsService {
         AppUser user = appUserRepository.findByAppUserEmail(email)
                 .orElseThrow(() -> new AppUserNotFoundByEmailException(email));
 
+        boolean isAdmin = user.getAppUserEmail().equalsIgnoreCase("damianzmudzinski3@gmail.com");
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getAppUserEmail())
                 .password(user.getAppUserPassword())
-                .roles("USER")
+                .roles(isAdmin ? "ADMIN" : "USER")
                 .build();
     }
+
 }

@@ -19,25 +19,35 @@ public class SecurityConfig {
 
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/getAll/**").permitAll()          // <- DODAJ TO
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/admin/getAll/**").permitAll()
-                        .requestMatchers("/remove/**").permitAll()
-                        .requestMatchers("/updateAdminCity/**").permitAll()
-                        .requestMatchers("/updateAdminDistrict/**").permitAll()
-                        .requestMatchers("/updateAppUser/**").permitAll()
-                        .requestMatchers("/updateArtPiece/**").permitAll()
+
+                        // public
+                        .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        .requestMatchers("/auth/registerCity", "/auth/registerDistrict").permitAll()
+                        .requestMatchers("/auth/addCommute").permitAll()
                         .requestMatchers("/map/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/getAll/**").permitAll() // jeśli chcesz
+
+                        // auth endpoints that require logged-in (bo korzystasz z sesji/cookie)
+                        .requestMatchers("/auth/me").authenticated()
+                        .requestMatchers("/auth/logout").authenticated()
+
+                        // ADMIN ONLY (to jest klucz)
+                        .requestMatchers(HttpMethod.GET, "/getAll/**").hasRole("ADMIN")
+                        .requestMatchers("/remove/**").hasRole("ADMIN")
+                        .requestMatchers("/updateAppUser/**").hasRole("ADMIN")
+                        .requestMatchers("/updateArtPiece/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 );
+
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
