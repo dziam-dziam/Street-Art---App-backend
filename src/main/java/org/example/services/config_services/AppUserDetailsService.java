@@ -14,13 +14,12 @@ public class AppUserDetailsService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
 
-    //TODO finals
     @Override
     public UserDetails loadUserByUsername(String email) {
-        AppUser user = appUserRepository.findByAppUserEmail(email)
+        final AppUser user = appUserRepository.findByAppUserEmail(email)
                 .orElseThrow(() -> new AppUserNotFoundByEmailException(email));
 
-        boolean isAdmin = user.getAppUserEmail().equalsIgnoreCase("damianzmudzinski3@gmail.com");
+        final boolean isAdmin = user.getAppUserEmail().equalsIgnoreCase("damianzmudzinski3@gmail.com");
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getAppUserEmail())
@@ -28,5 +27,4 @@ public class AppUserDetailsService implements UserDetailsService {
                 .roles(isAdmin ? "ADMIN" : "USER")
                 .build();
     }
-
 }

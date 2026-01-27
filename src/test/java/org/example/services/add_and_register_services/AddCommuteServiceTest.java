@@ -26,19 +26,17 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AddCommuteServiceTest {
 
-    //TODO private pola!
+    @Mock
+    private AppUserRepository appUserRepository;
 
     @Mock
-    AppUserRepository appUserRepository;
+    private CommuteMapper commuteMapper;
 
     @Mock
-    CommuteMapper commuteMapper;
-
-    @Mock
-    CommuteRepository commuteRepository;
+    private CommuteRepository commuteRepository;
 
     @InjectMocks
-    AddCommuteService addCommuteService;
+    private AddCommuteService addCommuteService;
 
     @Test
     void should_add_commute() {

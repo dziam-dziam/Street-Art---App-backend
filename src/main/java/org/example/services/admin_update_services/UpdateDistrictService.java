@@ -20,12 +20,11 @@ public class UpdateDistrictService {
     private final CityRepository cityRepository;
     private final DistrictMapper districtMapper;
 
-    //TODO finals
     public DistrictAdminDto updateDistrictById(Long districtId, UpdateDistrictDto updateDistrictDto) {
-        District districtToBeUpdated = districtRepository.findById(districtId)
+        final District districtToBeUpdated = districtRepository.findById(districtId)
                 .orElseThrow(() -> new DistrictNotFoundByIdException(districtId));
-        String updateDistrictDtoCityName = updateDistrictDto.getDistrictCity();
-        City updateDistrictDtoCityEntity = cityRepository.findByCityName(updateDistrictDtoCityName)
+        final String updateDistrictDtoCityName = updateDistrictDto.getDistrictCity();
+        final City updateDistrictDtoCityEntity = cityRepository.findByCityName(updateDistrictDtoCityName)
                 .orElseThrow(() -> new CityNotFoundByNameException(updateDistrictDtoCityName));
 
         districtToBeUpdated.setDistrictName(updateDistrictDto.getDistrictName());

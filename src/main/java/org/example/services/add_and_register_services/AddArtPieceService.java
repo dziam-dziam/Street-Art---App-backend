@@ -25,30 +25,26 @@ public class AddArtPieceService {
     private final ArtPieceMapper artPieceMapper;
     private final DistrictRepository districtRepository;
 
-    //TODO dodaj final do zmiennych
     public ArtPieceDto createArtPiece(AddArtPieceDto addArtPieceDto) {
         if (addArtPieceDto == null) throw new IllegalArgumentException("AddArtPieceDto is null");
         if (addArtPieceDto.getArtPieceAddress() == null)
             throw new IllegalArgumentException("AddArtPieceDto address is null");
 
-        //TODO po co wyniesione do zmiennej?
-        String artPieceDtoAddress = addArtPieceDto.getArtPieceAddress();
-
-        String addArtPieceDtoCityName = addArtPieceDto.getArtPieceCity();
-        Location artPieceLocation = locationMapper.mapAddressToLocationEntity(artPieceDtoAddress, addArtPieceDtoCityName);
+        final String addArtPieceDtoCityName = addArtPieceDto.getArtPieceCity();
+        Location artPieceLocation = locationMapper.mapAddressToLocationEntity(addArtPieceDto.getArtPieceAddress(), addArtPieceDtoCityName);
 
         if (artPieceLocation.getId() == null) {
             artPieceLocation = locationRepository.save(artPieceLocation);
         } else throw new LocationAlreadyOccupiedException(artPieceRepository.getArtPiecesByLocationLatitudeAndLongitude
                 (artPieceLocation.getLocationLatitude(), artPieceLocation.getLocationLongitude()), artPieceLocation);
 
-        String artPieceDtoDistrictName = addArtPieceDto.getArtPieceDistrict();
-        District artPieceDtoDistrictEntity = districtRepository.findByDistrictName(artPieceDtoDistrictName)
+        final String artPieceDtoDistrictName = addArtPieceDto.getArtPieceDistrict();
+        final District artPieceDtoDistrictEntity = districtRepository.findByDistrictName(artPieceDtoDistrictName)
                 .orElseThrow(() -> new DistrictNotFoundByNameException(artPieceDtoDistrictName));
 
         ArtPieceDto artPieceDto = ArtPieceDto.builder()
                 .artPieceDistrict(artPieceDtoDistrictName)
-                .artPieceAddress(artPieceDtoAddress)
+                .artPieceAddress(addArtPieceDto.getArtPieceAddress())
                 .artPieceName(addArtPieceDto.getArtPieceName())
                 .artPieceStyles(addArtPieceDto.getArtPieceStyles())
                 .artPieceTypes(addArtPieceDto.getArtPieceTypes())
@@ -59,14 +55,14 @@ public class AddArtPieceService {
                 .artPieceUserDescription(addArtPieceDto.getArtPieceUserDescription())
                 .build();
 
-        ArtPiece artPiece = artPieceMapper.mapArtPieceDtoToArtPieceEntity(artPieceDto);
+        final ArtPiece artPiece = artPieceMapper.mapArtPieceDtoToArtPieceEntity(artPieceDto);
         artPiece.setArtPieceLocation(artPieceLocation);
 
         artPieceLocation.addArtPiece(artPiece);
         artPieceLocation.setLocationDistrict(artPieceDtoDistrictEntity);
         artPieceDtoDistrictEntity.addArtPiece(artPiece);
 
-        ArtPiece saved = artPieceRepository.save(artPiece);
+        final ArtPiece saved = artPieceRepository.save(artPiece);
 
         return artPieceMapper.mapArtPieceEntityToArtPieceDto(saved);
     }

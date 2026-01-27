@@ -17,12 +17,11 @@ public class GetAllAppUsersService {
     private final AppUserRepository appUserRepository;
     private final AppUserMapper appUserMapper;
 
-    //TODO finals
     public List<AppUserAdminDto> getAllAppUsers() {
-        List<AppUserAdminDto> appUserDtos = new ArrayList<>();
-        List<AppUser> appUserEntities = appUserRepository.findAll();
+        final List<AppUserAdminDto> appUserDtos = new ArrayList<>();
+        final List<AppUser> appUserEntities = appUserRepository.findAll();
         for (AppUser appUserEntity : appUserEntities) {
-            AppUserAdminDto appUserDto = appUserMapper.mapAppUserEntityToAdminDto(appUserEntity);
+            final AppUserAdminDto appUserDto = appUserMapper.mapAppUserEntityToAdminDto(appUserEntity);
             appUserDtos.add(appUserDto);
         }
         return appUserDtos;

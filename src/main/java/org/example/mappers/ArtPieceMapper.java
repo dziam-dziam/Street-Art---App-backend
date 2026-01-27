@@ -21,7 +21,6 @@ public class ArtPieceMapper {
     private final GetDistrictByNameService getDistrictByNameService;
     private final LocationMapper locationMapper;
 
-    //TODO finals
     public ArtPiece mapArtPieceDtoToArtPieceEntity(ArtPieceDto artPieceDto) {
         if (artPieceDto == null) throw new IllegalArgumentException("ArtPieceDto is null");
         if (artPieceDto.getArtPieceDistrict() == null)
@@ -97,8 +96,8 @@ public class ArtPieceMapper {
                 .build();
     }
 
-    public ArtPieceAdminDto mapArtPieceEntityToAdminDto(ArtPiece artPieceEntity){
-        if (artPieceEntity == null){
+    public ArtPieceAdminDto mapArtPieceEntityToAdminDto(ArtPiece artPieceEntity) {
+        if (artPieceEntity == null) {
             throw new IllegalArgumentException("Artpiece entity is null");
         }
 

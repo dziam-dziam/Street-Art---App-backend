@@ -17,12 +17,11 @@ public class GetAllArtPiecesService {
     private final ArtPieceRepository artPieceRepository;
     private final ArtPieceMapper artPieceMapper;
 
-    //TODO finals
     public List<ArtPieceAdminDto> getAllArtPieces() {
-        List<ArtPieceAdminDto> artPieceDtos = new ArrayList<>();
-        List<ArtPiece> artPieceEntities = artPieceRepository.findAll();
+        final List<ArtPieceAdminDto> artPieceDtos = new ArrayList<>();
+        final List<ArtPiece> artPieceEntities = artPieceRepository.findAll();
         for (ArtPiece artPieceEntity : artPieceEntities) {
-            ArtPieceAdminDto artPieceResponseDto = artPieceMapper.mapArtPieceEntityToAdminDto(artPieceEntity);
+            final ArtPieceAdminDto artPieceResponseDto = artPieceMapper.mapArtPieceEntityToAdminDto(artPieceEntity);
             artPieceDtos.add(artPieceResponseDto);
         }
         return artPieceDtos;

@@ -17,19 +17,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class FixLocationServiceTest {
 
-    //TODO private pola!
-
     @Mock
-    LocationRepository locationRepository;
+    private LocationRepository locationRepository;
 
     @InjectMocks
-    FixLocationService fixLocationService;
-
-    //TODO dodaj case jezeli sie nie uda
+    private FixLocationService fixLocationService;
 
     @Test
     void should_fix_invalid_location_and_save() {
-        // given
         double oldLat = 52.40;
         double oldLng = 16.90;
 
@@ -52,10 +47,8 @@ class FixLocationServiceTest {
 
         when(locationRepository.save(existing)).thenReturn(existing);
 
-        // when
         fixLocationService.fixInvalidLocation(oldLng, oldLat , dto);
 
-        // then
         assertEquals(newLat, existing.getLocationLatitude());
         assertEquals(newLng, existing.getLocationLongitude());
 

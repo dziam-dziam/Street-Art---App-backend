@@ -17,25 +17,24 @@ public class RegisterCityService {
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
 
-    //TODO finals
     public CityDto createCity(AddCityDto addCityDto) {
         if (addCityDto == null) throw new IllegalArgumentException("AddCityDto is null");
         if (addCityDto.getCityName() == null) throw new IllegalArgumentException("AddCityDto city name is null");
 
-        String addCityDtoCityName = addCityDto.getCityName();
+        final String addCityDtoCityName = addCityDto.getCityName();
 
         if (cityRepository.findByCityName(addCityDtoCityName).isPresent()) {
             throw new IllegalArgumentException("City with name: " + addCityDtoCityName + " already  exists");
         }
 
-        CityDto cityDto = CityDto.builder()
+        final CityDto cityDto = CityDto.builder()
                 .cityName(addCityDtoCityName)
                 .cityResidentsCount(addCityDto.getCityResidentsCount())
                 .cityDistricts(new HashSet<>())
                 .build();
 
-        City city = cityMapper.mapCityDtoToCityEntity(cityDto);
-        City saved = cityRepository.save(city);
+        final City city = cityMapper.mapCityDtoToCityEntity(cityDto);
+        final City saved = cityRepository.save(city);
 
         return cityMapper.mapCityEntityToCityDto(saved);
     }

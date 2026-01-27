@@ -12,8 +12,7 @@ public class GetDistrictByNameService {
 
     private final DistrictRepository districtRepository;
 
-    //TODO finals
-    public District getDistrictByName(String districtName){
+    public District getDistrictByName(final String districtName){
       return districtRepository.findByDistrictName(districtName)
               .orElseThrow(() -> new DistrictNotFoundByNameException
                       ("District with name: " + districtName + " was not found"));

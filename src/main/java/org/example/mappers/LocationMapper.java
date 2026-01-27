@@ -20,7 +20,6 @@ public class LocationMapper {
     private final LocationRepository locationRepository;
     private final int SCALE_OF_ROUNDING = 6;
 
-    //TODO finals
     public Location mapAddressToLocationEntity(String address, String city) {
         if (address == null || address.isBlank()) throw new IllegalArgumentException("Address is null/blank");
 
@@ -30,21 +29,21 @@ public class LocationMapper {
 
         GeocodeResult geocodeResult = geocodingService.geocode(query);
 
-        double geocodeResultLatitude = geocodeResult.getLatitude();
-        double geocodeResultLongitude = geocodeResult.getLongitude();
+        double geocodeResultLatitude = geocodeResult.latitude();
+        double geocodeResultLongitude = geocodeResult.longitude();
 
         double latitude = round(geocodeResultLatitude);
         double longitude = round(geocodeResultLongitude);
 
         return locationRepository
-                .findByLocationLatitudeAndLocationLongitude(latitude,longitude)
+                .findByLocationLatitudeAndLocationLongitude(latitude, longitude)
                 .orElseGet(() -> Location.builder()
                         .locationLongitude(longitude)
                         .locationLatitude(latitude)
                         .build());
     }
 
-    private double round(double value){
+    private double round(double value) {
         return BigDecimal.valueOf(value).setScale(SCALE_OF_ROUNDING, RoundingMode.HALF_UP).doubleValue();
     }
 

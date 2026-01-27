@@ -32,9 +32,6 @@ public class Location {
     @JoinColumn(name = "district_id")
     private District locationDistrict;
 
-    //TODO DODAĆ METODĘ ADD ART PIECE ŻEBY Z TEJ STRONY ART PIECE TEŻ BYŁ POŁĄCZONY Z LOCATION
-    //TODO DODAĆ METODĘ ADD LOCATION W DISTRICT ABY OD STRONY DISTRICT LOCATION BYŁO RÓWNIEŻ PODŁĄCZONE
-
     public void addArtPiece(ArtPiece artPiece){
         if (artPiece == null) throw new IllegalArgumentException("ArtPiece entity is null");
         locationArtPieces.add(artPiece);

@@ -20,12 +20,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RegisterCityServiceTest {
 
-    //TODO private pola!
+    @Mock
+    private CityRepository cityRepository;
+    @Mock
+    private CityMapper cityMapper;
 
-    @Mock CityRepository cityRepository;
-    @Mock CityMapper cityMapper;
-
-    @InjectMocks RegisterCityService registerCityService;
+    @InjectMocks
+    private RegisterCityService registerCityService;
 
     @Test
     void should_register_city_when_not_exists() {

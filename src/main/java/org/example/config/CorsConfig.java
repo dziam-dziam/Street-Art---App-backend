@@ -23,5 +23,4 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
-
 }

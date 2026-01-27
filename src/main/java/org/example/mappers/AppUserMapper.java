@@ -26,7 +26,6 @@ public class AppUserMapper {
     private final DistrictRepository districtRepository;
     private final CommuteMapper commuteMapper;
 
-    //TODO finals
     public AppUser mapAppUserDtoToAppUserEntity(AppUserDto appUserDto) {
         if (appUserDto == null) throw new IllegalArgumentException("AppUserDto is null");
         if (appUserDto.getAppUserCity() == null || appUserDto.getAppUserCity().isBlank())
@@ -86,8 +85,8 @@ public class AppUserMapper {
                 .build();
     }
 
-    public AppUserAdminDto mapAppUserEntityToAdminDto(AppUser appUserEntity){
-        if (appUserEntity == null){
+    public AppUserAdminDto mapAppUserEntityToAdminDto(AppUser appUserEntity) {
+        if (appUserEntity == null) {
             throw new IllegalArgumentException("App user entity is null");
         }
 

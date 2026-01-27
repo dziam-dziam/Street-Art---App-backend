@@ -14,26 +14,23 @@ public class RemoveControllers {
 
     private final RemoveServices removeServices;
 
-    //TODO czy nie lepiej dawac info na frontend ze zostalo to usuniete pomyslnie lub nie? gdyz to void, ResponseEntity?
-    //TODO oczywiscie przy zalozeniu ze uzytkownik usuwac recznie cos, to na 100% on musi wiedziec rezultat
-
     @DeleteMapping("artPiece/{id}")
-    public void removeArtPieceById(@PathVariable Long id){
+    public void removeArtPieceById(@PathVariable Long id) {
         removeServices.removeArtPieceById(id);
     }
 
     @DeleteMapping("appUser/{id}")
-    public void removeAppUserById(@PathVariable Long id){
+    public void removeAppUserById(@PathVariable Long id) {
         removeServices.removeAppUserById(id);
     }
 
     @DeleteMapping("cities/{id}")
-    public void removeCityById(@PathVariable Long id){
+    public void removeCityById(@PathVariable Long id) {
         removeServices.removeCityById(id);
     }
 
     @DeleteMapping("district/{id}")
-    public void removeDistrictById(@PathVariable Long id){
+    public void removeDistrictById(@PathVariable Long id) {
         removeServices.removeDistrictById(id);
     }
 

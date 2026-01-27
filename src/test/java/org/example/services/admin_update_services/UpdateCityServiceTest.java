@@ -19,13 +19,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UpdateCityServiceTest {
 
-    //TODO private pola!
-    @Mock CityRepository cityRepository;
-    @Mock CityMapper cityMapper;
+    @Mock
+    private CityRepository cityRepository;
+    @Mock
+    private CityMapper cityMapper;
 
-    @InjectMocks UpdateCityService updateCityService;
-
-    //TODO dodaj case jezeli sie nie uda
+    @InjectMocks
+    private UpdateCityService updateCityService;
 
     @Test
     void should_update_city_by_id() {

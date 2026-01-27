@@ -14,7 +14,7 @@ public class UpdateCityController {
     private final UpdateCityService updateCityService;
 
     @PutMapping("city/{id}")
-    public CityAdminDto updateCity(@PathVariable Long id, @RequestBody UpdateCityDto updateCityDto){
-        return updateCityService.updateCityById(id,updateCityDto);
+    public CityAdminDto updateCity(@PathVariable Long id, @RequestBody UpdateCityDto updateCityDto) {
+        return updateCityService.updateCityById(id, updateCityDto);
     }
 }

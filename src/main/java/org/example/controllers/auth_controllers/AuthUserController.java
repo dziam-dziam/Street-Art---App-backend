@@ -34,11 +34,8 @@ public class AuthUserController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final RegisterAppUserService registerAppUserService;
-
     private final SecurityContextRepository securityContextRepository =
             new HttpSessionSecurityContextRepository();
-
-    //TODO finals
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterAppUserDto registerAppUserDto) {

@@ -24,29 +24,28 @@ public class RemoveServices {
     private final CityRepository cityRepository;
     private final DistrictRepository districtRepository;
 
-    //TODO finals
     public void removeAppUserById(Long appUserId) {
-        AppUser appUserToRemove = appUserRepository.findById(appUserId)
+        final AppUser appUserToRemove = appUserRepository.findById(appUserId)
                 .orElseThrow(() -> new AppUserNotFoundByIdException(appUserId));
 
         appUserRepository.delete(appUserToRemove);
     }
 
     public void removeArtPieceById(Long artPieceId) {
-        ArtPiece artPieceToRemove = artPieceRepository.findById(artPieceId)
+        final ArtPiece artPieceToRemove = artPieceRepository.findById(artPieceId)
                 .orElseThrow(() -> new ArtPieceNotFoundByIdException(artPieceId));
 
         artPieceRepository.delete(artPieceToRemove);
     }
 
     public void removeCityById(Long cityId) {
-        City cityToRemove = cityRepository.findById(cityId)
+        final City cityToRemove = cityRepository.findById(cityId)
                 .orElseThrow(() -> new CityNotFoundByIdException(cityId));
         cityRepository.delete(cityToRemove);
     }
 
     public void removeDistrictById(Long districtId){
-        District districtToRemove = districtRepository.findById(districtId)
+        final District districtToRemove = districtRepository.findById(districtId)
                 .orElseThrow(() -> new DistrictNotFoundByIdException(districtId));
         districtRepository.delete(districtToRemove);
     }

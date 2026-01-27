@@ -18,19 +18,18 @@ public class RegisterAppUserService {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
 
-    //TODO finals
     public AppUserDto registerAppUser(RegisterAppUserDto registerAppUserDto) {
         if (registerAppUserDto == null) throw new IllegalArgumentException("RegisterAppUserDto is null");
 
-        String enteredEmail = registerAppUserDto.getAppUserEmail();
+        final String enteredEmail = registerAppUserDto.getAppUserEmail();
         if (appUserRepository.findByAppUserEmail(enteredEmail).isPresent()) {
             throw new IllegalArgumentException("User with email: " + enteredEmail + " already exists");
         }
 
-        String registerAppUserDtoPassword = registerAppUserDto.getAppUserPassword();
-        String appUserDtoEncodedPassword = passwordEncoder.encode(registerAppUserDtoPassword);
+        final String registerAppUserDtoPassword = registerAppUserDto.getAppUserPassword();
+        final String appUserDtoEncodedPassword = passwordEncoder.encode(registerAppUserDtoPassword);
 
-        AppUserDto appUserDto = AppUserDto.builder()
+        final AppUserDto appUserDto = AppUserDto.builder()
                 .appUserCity(registerAppUserDto.getAppUserCity())
                 .appUserName(registerAppUserDto.getAppUserName())
                 .appUserEmail(registerAppUserDto.getAppUserEmail())
@@ -41,8 +40,8 @@ public class RegisterAppUserService {
                 .appUserCommuteDtos(new HashSet<>())
                 .build();
 
-        AppUser appUser = appUserMapper.mapAppUserDtoToAppUserEntity(appUserDto);
-        AppUser saved = appUserRepository.save(appUser);
+        final AppUser appUser = appUserMapper.mapAppUserDtoToAppUserEntity(appUserDto);
+        final AppUser saved = appUserRepository.save(appUser);
 
         return appUserMapper.mapAppUserEntityToAppUserDto(saved);
     }

@@ -17,25 +17,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
 
-                        // public
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .requestMatchers("/auth/registerCity", "/auth/registerDistrict").permitAll()
                         .requestMatchers("/auth/addCommute").permitAll()
                         .requestMatchers("/map/**").permitAll()
 
-                        // auth endpoints that require logged-in (bo korzystasz z sesji/cookie)
                         .requestMatchers("/auth/me").authenticated()
                         .requestMatchers("/auth/logout").authenticated()
 
-                        // ADMIN ONLY (to jest klucz)
                         .requestMatchers(HttpMethod.GET, "/getAll/**").hasRole("ADMIN")
                         .requestMatchers("/remove/**").hasRole("ADMIN")
                         .requestMatchers("/updateAppUser/**").hasRole("ADMIN")
@@ -44,10 +40,8 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 );
-
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -55,7 +49,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 }

@@ -31,14 +31,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AddArtPieceServiceTest {
 
-    //TODO private pola!
-    @Mock LocationRepository locationRepository;
-    @Mock LocationMapper locationMapper;
-    @Mock ArtPieceRepository artPieceRepository;
-    @Mock ArtPieceMapper artPieceMapper;
-    @Mock DistrictRepository districtRepository;
+    @Mock private LocationRepository locationRepository;
+    @Mock private LocationMapper locationMapper;
+    @Mock private ArtPieceRepository artPieceRepository;
+    @Mock private ArtPieceMapper artPieceMapper;
+    @Mock private DistrictRepository districtRepository;
 
-    @InjectMocks AddArtPieceService addArtPieceService;
+    @InjectMocks private AddArtPieceService addArtPieceService;
 
     @Test
     void should_create_art_piece_and_save_location_when_new_location() {

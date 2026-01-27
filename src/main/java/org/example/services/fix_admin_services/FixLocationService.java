@@ -11,18 +11,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FixLocationService {
 
-
     private final LocationRepository locationRepository;
 
-    //TODO finale!
     public Location fixInvalidLocation(double locationLongitude, double locationLatitude,
                                        UpdateLocationDto updateLocationDto) {
-        Location locationToBeFixed = locationRepository
+        final Location locationToBeFixed = locationRepository
                 .findByLocationLatitudeAndLocationLongitude(locationLatitude, locationLongitude)
                 .orElseThrow(() -> new LocationNotFoundByLonLatException(locationLatitude, locationLongitude));
 
-        double newLocationLatitude = updateLocationDto.getLocationLatitude();
-        double newLocationLongitude = updateLocationDto.getLocationLongitude();
+        final double newLocationLatitude = updateLocationDto.getLocationLatitude();
+        final double newLocationLongitude = updateLocationDto.getLocationLongitude();
 
         locationToBeFixed.setLocationLatitude(newLocationLatitude);
         locationToBeFixed.setLocationLongitude(newLocationLongitude);

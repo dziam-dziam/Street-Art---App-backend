@@ -8,7 +8,6 @@ import org.example.entities.District;
 import org.example.entities.Location;
 import org.example.exceptions.ArtPieceNotFoundByIdException;
 import org.example.exceptions.DistrictNotFoundByNameException;
-import org.example.exceptions.LocationAlreadyOccupiedException;
 import org.example.mappers.ArtPieceMapper;
 import org.example.mappers.LocationMapper;
 import org.example.repositories.ArtPieceRepository;
@@ -28,25 +27,23 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UpdateArtPieceServiceTest {
 
-    //TODO private pola!
+    @Mock
+    private ArtPieceRepository artPieceRepository;
 
     @Mock
-    ArtPieceRepository artPieceRepository;
+    private LocationMapper locationMapper;
 
     @Mock
-    LocationMapper locationMapper;
+    private LocationRepository locationRepository;
 
     @Mock
-    LocationRepository locationRepository;
+    private DistrictRepository districtRepository;
 
     @Mock
-    DistrictRepository districtRepository;
-
-    @Mock
-    ArtPieceMapper artPieceMapper;
+    private ArtPieceMapper artPieceMapper;
 
     @InjectMocks
-    UpdateArtPieceService updateArtPieceService;
+    private UpdateArtPieceService updateArtPieceService;
 
     @Test
     void should_update_artpiece_when_new_location_and_district_found_by_name() {
@@ -152,45 +149,6 @@ class UpdateArtPieceServiceTest {
     }
 
     @Test
-    void should_throw_when_return_existing_location() {
-        String occupiedArtPieceAddress = "occupied address 1";
-        String updatedArtPieceCityName = "Poznań";
-
-        long artPieceToUpdateId = 2L;
-        long occupiedLocationId = 1L;
-        int occupiedLocationLongitude = 10;
-        int occupiedLocationLatitude = 2;
-
-        ArtPiece artPieceToUpdate = ArtPiece
-                .builder()
-                .id(artPieceToUpdateId)
-                .build();
-
-        Location occupiedLocation = Location.builder()
-                .id(occupiedLocationId)
-                .locationLongitude(occupiedLocationLongitude)
-                .locationLatitude(occupiedLocationLatitude)
-                .build();
-
-        UpdateArtPieceDto updateArtPieceDto = UpdateArtPieceDto.builder()
-                .artPieceAddress(occupiedArtPieceAddress)
-                .artPieceCity(updatedArtPieceCityName)
-                .build();
-
-        when(artPieceRepository.findById(artPieceToUpdateId)).thenReturn(Optional.ofNullable(artPieceToUpdate));
-
-        when(locationMapper.mapAddressToLocationEntity(occupiedArtPieceAddress, updatedArtPieceCityName))
-                .thenReturn(occupiedLocation);
-
-        assertThrows(LocationAlreadyOccupiedException.class, () -> updateArtPieceService.updateArtPieceById(artPieceToUpdateId, updateArtPieceDto));
-
-        verify(locationRepository, never()).save(any());
-        verify(artPieceRepository).findById(artPieceToUpdateId);
-        verify(locationMapper).mapAddressToLocationEntity(occupiedArtPieceAddress,updatedArtPieceCityName);
-
-    }
-
-    @Test
     void should_throw_when_district_not_found() {
         long artPieceToBeUpdatedId = 1L;
         long mappedLocationLatitude = 10L;
@@ -204,7 +162,6 @@ class UpdateArtPieceServiceTest {
         ArtPiece artPieceToBeUpdated = ArtPiece.builder()
                 .id(artPieceToBeUpdatedId)
                 .build();
-
 
         UpdateArtPieceDto updateArtPieceDto = UpdateArtPieceDto.builder()
                 .artPieceAddress(updatedAddress)
@@ -235,15 +192,16 @@ class UpdateArtPieceServiceTest {
         when(districtRepository.findByDistrictName(notFoundDistrictName))
                 .thenReturn(Optional.empty());
 
-        assertThrows(DistrictNotFoundByNameException.class,() -> updateArtPieceService.updateArtPieceById(artPieceToBeUpdatedId,updateArtPieceDto));
+        assertThrows(DistrictNotFoundByNameException.class,
+                () -> updateArtPieceService.updateArtPieceById(artPieceToBeUpdatedId, updateArtPieceDto));
 
         verify(artPieceRepository).findById(artPieceToBeUpdatedId);
         verify(locationMapper).mapAddressToLocationEntity(updatedAddress, updatedCityName);
         verify(locationRepository).save(addressMappedToLocation);
         verify(districtRepository).findByDistrictName(notFoundDistrictName);
-        verify(artPieceRepository,never()).save(any());
-        verify(artPieceMapper, never()).mapArtPieceEntityToArtPieceDto(any());
 
+        verify(artPieceRepository, never()).save(any());
+        verify(artPieceMapper, never()).mapArtPieceEntityToArtPieceDto(any());
     }
 
 }

@@ -4,14 +4,14 @@ import org.example.dtos.app_user.AppUserDto;
 import org.example.dtos.app_user.UpdateAppUserDto;
 import org.example.dtos.commute.CommuteDto;
 import org.example.entities.AppUser;
-import org.example.entities.City;
 import org.example.entities.Commute;
 import org.example.entities.District;
 import org.example.enums.MeansOfTransport;
+import org.example.exceptions.AppUserNotFoundByEmailException;
+import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.mappers.AppUserMapper;
 import org.example.mappers.CommuteMapper;
 import org.example.repositories.AppUserRepository;
-import org.example.repositories.CityRepository;
 import org.example.repositories.DistrictRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,17 +28,17 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UpdateAppUserServiceTest {
 
-    //TODO private pola!
+    @Mock
+    private AppUserRepository appUserRepository;
+    @Mock
+    private CommuteMapper commuteMapper;
+    @Mock
+    private DistrictRepository districtRepository;
+    @Mock
+    private AppUserMapper appUserMapper;
 
-    @Mock AppUserRepository appUserRepository;
-    @Mock CityRepository cityRepository;
-    @Mock CommuteMapper commuteMapper;
-    @Mock DistrictRepository districtRepository;
-    @Mock AppUserMapper appUserMapper;
-
-    @InjectMocks UpdateAppUserService updateAppUserService;
-
-    //TODO dodaj case jezeli sie nie uda
+    @InjectMocks
+    UpdateAppUserService updateAppUserService;
 
     @Test
     void should_update_user_and_replace_commutes() {
@@ -55,9 +55,7 @@ class UpdateAppUserServiceTest {
 
         when(appUserRepository.findByAppUserEmail("old@test.com")).thenReturn(Optional.of(user));
 
-        City city = City.builder().id(10L).cityName("Poznań").build();
         District district = District.builder().id(20L).districtName("Jeżyce").build();
-        when(cityRepository.findByCityName("Poznań")).thenReturn(Optional.of(city));
         when(districtRepository.findByDistrictName("Jeżyce")).thenReturn(Optional.of(district));
 
         CommuteDto newCommuteDto = CommuteDto.builder()
@@ -90,7 +88,6 @@ class UpdateAppUserServiceTest {
         assertEquals("NewName", user.getAppUserName());
         assertEquals("new@test.com", user.getAppUserEmail());
         assertEquals("newpass", user.getAppUserPassword());
-        assertSame(city, user.getAppUserCity());
         assertSame(district, user.getAppUserLiveInDistrict());
 
         assertEquals(1, user.getAppUserCommutes().size());
@@ -102,4 +99,49 @@ class UpdateAppUserServiceTest {
 
         verify(appUserRepository).save(user);
     }
+
+    @Test
+    void should_throw_when_user_not_found() {
+        UpdateAppUserDto updateDto = UpdateAppUserDto.builder()
+                .appUserName("NewName")
+                .appUserEmail("new@test.com")
+                .build();
+
+        when(appUserRepository.findByAppUserEmail("old@test.com"))
+                .thenReturn(Optional.empty());
+
+        assertThrows(AppUserNotFoundByEmailException.class,
+                () -> updateAppUserService.updateAppUserByEmail(updateDto, "old@test.com"));
+
+        verify(appUserRepository, never()).save(any());
+    }
+
+    @Test
+    void should_throw_when_district_not_found() {
+        AppUser user = AppUser.builder()
+                .id(1L)
+                .appUserEmail("old@test.com")
+                .appUserName("Old")
+                .appUserPassword("oldpass")
+                .build();
+
+        UpdateAppUserDto updateDto = UpdateAppUserDto.builder()
+                .appUserName("NewName")
+                .appUserEmail("new@test.com")
+                .appUserLiveInDistrict("Jeżyce")
+                .build();
+
+        when(appUserRepository.findByAppUserEmail("old@test.com"))
+                .thenReturn(Optional.of(user));
+
+        when(districtRepository.findByDistrictName("Jeżyce"))
+                .thenReturn(Optional.empty());
+
+        assertThrows(DistrictNotFoundByNameException.class,
+                () -> updateAppUserService.updateAppUserByEmail(updateDto, "old@test.com"));
+
+        verify(appUserRepository, never()).save(any());
+    }
+
+
 }

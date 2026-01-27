@@ -21,14 +21,16 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterAppUserServiceTest {
+    
+    @Mock
+    private AppUserMapper appUserMapper;
+    @Mock
+    private AppUserRepository appUserRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
-    //TODO private pola!
-
-    @Mock AppUserMapper appUserMapper;
-    @Mock AppUserRepository appUserRepository;
-    @Mock PasswordEncoder passwordEncoder;
-
-    @InjectMocks RegisterAppUserService registerAppUserService;
+    @InjectMocks
+    private RegisterAppUserService registerAppUserService;
 
     @Test
     void should_register_user_and_encode_password() {

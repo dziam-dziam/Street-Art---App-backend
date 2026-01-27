@@ -19,7 +19,6 @@ public class DistrictMapper {
     private final DistrictRepository districtRepository;
     private final CityRepository cityRepository;
 
-    //TODO finals
     public District mapDistrictDtoToDistrictEntity(DistrictDto districtDto) {
         if (districtDto == null) throw new IllegalArgumentException("DistrictDto is null");
 
@@ -51,8 +50,8 @@ public class DistrictMapper {
                 .build();
     }
 
-    public DistrictAdminDto mapDistrictEntityToAdminDto(District districtEntity){
-        if (districtEntity == null){
+    public DistrictAdminDto mapDistrictEntityToAdminDto(District districtEntity) {
+        if (districtEntity == null) {
             throw new IllegalArgumentException("District entity is null");
         }
 

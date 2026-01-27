@@ -16,8 +16,8 @@ public class UploadPhotoController {
 
     @PostMapping(value = "/{artPieceId}/photos", consumes = "multipart/form-data")
     public PhotoResponseDto uploadPhoto(@PathVariable Long artPieceId,
-                                   @RequestParam("image") MultipartFile file) throws Exception {
-        try{
+                                        @RequestParam("image") MultipartFile file) throws Exception {
+        try {
             Photo saved = photoService.uploadPhotoToArtPiece(artPieceId, file);
             return PhotoResponseDto.builder()
                     .id(saved.getId())
@@ -26,7 +26,7 @@ public class UploadPhotoController {
                     .sizeBytes(saved.getSizeBytes())
                     .downloadUrl("/api/photos/" + saved.getId())
                     .build();
-        }catch (Exception exception){
+        } catch (Exception exception) {
             throw new Exception("There was an issue at uploading photo");
         }
     }

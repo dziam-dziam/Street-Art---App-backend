@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.UpdateArtPieceDto;
 import org.example.entities.ArtPiece;
+import org.example.entities.District;
 import org.example.entities.Location;
 import org.example.exceptions.ArtPieceNotFoundByIdException;
+import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.mappers.ArtPieceMapper;
 import org.example.mappers.LocationMapper;
 import org.example.repositories.ArtPieceRepository;
@@ -23,32 +25,24 @@ public class UpdateArtPieceService {
     private final DistrictRepository districtRepository;
     private final ArtPieceMapper artPieceMapper;
 
-    //TODO finals
     public ArtPieceDto updateArtPieceById(Long artPieceId, UpdateArtPieceDto updatedArtPieceDto) {
-        ArtPiece artPieceToBeUpdated = artPieceRepository.findById(artPieceId)
+        final ArtPiece artPieceToBeUpdated = artPieceRepository.findById(artPieceId)
                 .orElseThrow(() -> new ArtPieceNotFoundByIdException(artPieceId));
 
-        //TODO po co zmienne z geta? bez sensu
-        String updatedArtPieceDtoAddress = updatedArtPieceDto.getArtPieceAddress();
-        String updatedArtPieceDtoCityName = updatedArtPieceDto.getArtPieceCity();
-
-
         Location updatedArtPieceDtoLocation = locationMapper
-                .mapAddressToLocationEntity(updatedArtPieceDtoAddress, updatedArtPieceDtoCityName);
+                .mapAddressToLocationEntity(updatedArtPieceDto.getArtPieceAddress(), updatedArtPieceDto.getArtPieceCity());
 
-        //TODO wynies do osobnej metody dobrze opisanej
+        updatedArtPieceDtoLocation = locationRepository.save(updatedArtPieceDtoLocation);
 
-            updatedArtPieceDtoLocation = locationRepository.save(updatedArtPieceDtoLocation);
+        if (updatedArtPieceDto.getArtPieceDistrict() != null) {
+            final District updatedArtPieceDistrictEntity = districtRepository.findByDistrictName(updatedArtPieceDto.getArtPieceDistrict())
+                    .orElseThrow(() -> new DistrictNotFoundByNameException(updatedArtPieceDto.getArtPieceDistrict()));
+            artPieceToBeUpdated.setArtPieceDistrict(updatedArtPieceDistrictEntity);
+        }
 
-//        String artPieceDtoDistrictName = updatedArtPieceDto.getArtPieceDistrict();
-//        District updatedArtPieceDistrictEntity = districtRepository.findByDistrictName(artPieceDtoDistrictName)
-//                .orElseThrow(() -> new DistrictNotFoundByNameException(artPieceDtoDistrictName));
-
-
-        artPieceToBeUpdated.setArtPieceAddress(updatedArtPieceDtoAddress);
+        artPieceToBeUpdated.setArtPieceAddress(updatedArtPieceDto.getArtPieceAddress());
         artPieceToBeUpdated.setArtPieceName(updatedArtPieceDto.getArtPieceName());
         artPieceToBeUpdated.setArtPieceUserDescription(updatedArtPieceDto.getArtPieceUserDescription());
-//        artPieceToBeUpdated.setArtPieceDistrict(updatedArtPieceDistrictEntity);
         artPieceToBeUpdated.setArtPieceTypes(updatedArtPieceDto.getArtPieceTypes());
         artPieceToBeUpdated.setArtPieceStyles(updatedArtPieceDto.getArtPieceStyles());
         artPieceToBeUpdated.setArtPieceTextLanguages(updatedArtPieceDto.getArtPieceTextLanguages());

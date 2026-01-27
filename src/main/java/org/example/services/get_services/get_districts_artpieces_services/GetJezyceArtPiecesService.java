@@ -17,12 +17,11 @@ public class GetJezyceArtPiecesService {
     private final ArtPieceRepository artPieceRepository;
     private final ArtPieceMapper artPieceMapper;
 
-    //TODO finals
     public List<ResponseArtPieceDto> getJezyceArtpieces(){
-        List<ArtPiece> jezyceArtPieces = artPieceRepository.getArtPiecesFromDistrict("Jeżyce");
-        List<ResponseArtPieceDto> jezyceArtPiecesResponseDtos = new ArrayList<>();
+        final List<ArtPiece> jezyceArtPieces = artPieceRepository.getArtPiecesFromDistrict("Jeżyce");
+        final List<ResponseArtPieceDto> jezyceArtPiecesResponseDtos = new ArrayList<>();
         for (ArtPiece artPieceEntity : jezyceArtPieces){
-            ResponseArtPieceDto responseArtPieceDto = artPieceMapper.mapArtPieceEntityToResponseDto(artPieceEntity);
+            final ResponseArtPieceDto responseArtPieceDto = artPieceMapper.mapArtPieceEntityToResponseDto(artPieceEntity);
             jezyceArtPiecesResponseDtos.add(responseArtPieceDto);
         }
         return jezyceArtPiecesResponseDtos;

@@ -19,10 +19,9 @@ public class AddCommuteService {
     private final CommuteMapper commuteMapper;
     private final CommuteRepository commuteRepository;
 
-    //TODO finals
     public CommuteDto addCommute(AddCommuteDto addCommuteDto, String commutingAppUserEmail) {
         if (addCommuteDto == null) throw new IllegalArgumentException("AddCommuteDto is null");
-        AppUser appUserWithCommute = appUserRepository.findByAppUserEmail(commutingAppUserEmail)
+        final AppUser appUserWithCommute = appUserRepository.findByAppUserEmail(commutingAppUserEmail)
                 .orElseThrow(() -> new AppUserNotFoundByEmailException(commutingAppUserEmail));
 
         CommuteDto commuteDto = CommuteDto.builder()
@@ -34,11 +33,11 @@ public class AddCommuteService {
                 .commuteTripsPerWeek(addCommuteDto.getCommuteTripsPerWeek())
                 .build();
 
-        Commute commuteEntity = commuteMapper.mapCommuteDtoToCommuteEntities(commuteDto, appUserWithCommute);
+        final Commute commuteEntity = commuteMapper.mapCommuteDtoToCommuteEntities(commuteDto, appUserWithCommute);
 
         appUserWithCommute.addCommute(commuteEntity);
 
-        Commute saved = commuteRepository.save(commuteEntity);
+        final Commute saved = commuteRepository.save(commuteEntity);
         return commuteMapper.mapCommuteEntityToCommuteDto(saved);
     }
 }

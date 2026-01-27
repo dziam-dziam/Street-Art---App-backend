@@ -1,4 +1,4 @@
-package org.example.controllers.get_controllers;
+package org.example.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ArtPieceMapPointDto;

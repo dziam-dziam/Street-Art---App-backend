@@ -17,12 +17,11 @@ public class GetAllDistrictsService {
     private final DistrictRepository districtRepository;
     private final DistrictMapper districtMapper;
 
-    //TODO finals
     public List<DistrictAdminDto> getAllDistrict() {
-        List<DistrictAdminDto> districtDtos = new ArrayList<>();
-        List<District> districtEntities = districtRepository.findAll();
+        final List<DistrictAdminDto> districtDtos = new ArrayList<>();
+        final List<District> districtEntities = districtRepository.findAll();
         for (District districtEntity : districtEntities) {
-            DistrictAdminDto districtDto = districtMapper.mapDistrictEntityToAdminDto(districtEntity);
+            final DistrictAdminDto districtDto = districtMapper.mapDistrictEntityToAdminDto(districtEntity);
             districtDtos.add(districtDto);
         }
         return districtDtos;

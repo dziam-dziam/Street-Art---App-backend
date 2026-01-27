@@ -13,7 +13,7 @@ public class UpdateDistrictController {
     private final UpdateDistrictService updateDistrictService;
 
     @PutMapping("district/{id}")
-    public DistrictAdminDto updateDistrict(@PathVariable Long id, @RequestBody UpdateDistrictDto updateDistrictDto){
-        return updateDistrictService.updateDistrictById(id,updateDistrictDto);
+    public DistrictAdminDto updateDistrict(@PathVariable Long id, @RequestBody UpdateDistrictDto updateDistrictDto) {
+        return updateDistrictService.updateDistrictById(id, updateDistrictDto);
     }
 }

@@ -21,14 +21,12 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final ArtPieceRepository artPieceRepository;
 
-    //TODO finals
-
     @Transactional
     public Photo uploadPhotoToArtPiece(Long artPieceId, MultipartFile file) throws IOException {
-        ArtPiece artPiece = artPieceRepository.findById(artPieceId)
+        final ArtPiece artPiece = artPieceRepository.findById(artPieceId)
                 .orElseThrow(() -> new ArtPieceNotFoundByIdException(artPieceId));
 
-        Photo photo = Photo.builder()
+        final Photo photo = Photo.builder()
                 .fileName(file.getOriginalFilename())
                 .contentType(file.getContentType() == null ? "application/octet-stream" : file.getContentType())
                 .sizeBytes(file.getSize())
@@ -54,8 +52,8 @@ public class PhotoService {
 
     @Transactional
     public void deletePhoto(Long photoId) {
-        Photo photo = getPhoto(photoId);
-        ArtPiece artPiece = photo.getArtPieceOnPhoto();
+        final Photo photo = getPhoto(photoId);
+        final ArtPiece artPiece = photo.getArtPieceOnPhoto();
 
         if (artPiece != null) {
             artPiece.removePhoto(photo);

@@ -23,22 +23,32 @@ public class GetAllCitiesService {
     private final DistrictMapper districtMapper;
     private final CityMapper cityMapper;
 
-    //TODO finals
-    //TODO i mysle jak to uproscic, wydzieic do osobnej metody by tak makaronu nie bylo "petli w petli i tam sie cos dzieje"
     public List<CityDto> getAllCities() {
-        List<CityDto> cityDtos = new ArrayList<>();
-        List<City> cityEntities = cityRepository.findAll();
+        final List<City> cityEntities = cityRepository.findAll();
+        return mapCityEntitiesToDtos(cityEntities);
+    }
+
+
+    private Set<DistrictDto> mapDistrictEntitiesToDtos(Set<District> districts) {
+        final Set<DistrictDto> districtDtos = new HashSet<>();
+        for (District district : districts) {
+            final DistrictDto districtDto = districtMapper.mapDistrictEntityToDistrictDto(district);
+            districtDtos.add(districtDto);
+        }
+        return districtDtos;
+    }
+
+    private List<CityDto> mapCityEntitiesToDtos(List<City> cityEntities) {
+        final List<CityDto> cityDtos = new ArrayList<>();
+
         for (City cityEntity : cityEntities) {
-            Set<District> districts = cityEntity.getCityDistricts();
-            Set<DistrictDto> districtDtos = new HashSet<>();
-            for (District district : districts) {
-                DistrictDto districtDto = districtMapper.mapDistrictEntityToDistrictDto(district);
-                districtDtos.add(districtDto);
-            }
-            CityDto cityDto = cityMapper.mapCityEntityToCityDto(cityEntity);
+            final Set<District> districts = cityEntity.getCityDistricts();
+            final Set<DistrictDto> districtDtos = mapDistrictEntitiesToDtos(districts);
+            final CityDto cityDto = cityMapper.mapCityEntityToCityDto(cityEntity);
             cityDto.setCityDistricts(districtDtos);
             cityDtos.add(cityDto);
         }
+
         return cityDtos;
     }
 }
