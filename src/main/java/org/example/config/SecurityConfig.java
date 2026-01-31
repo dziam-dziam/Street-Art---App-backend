@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/registerCity", "/auth/registerDistrict").permitAll()
                         .requestMatchers("/auth/addCommute").permitAll()
                         .requestMatchers("/map/**").permitAll()
+                        .requestMatchers("/api/photos/download/**").permitAll()
 
                         .requestMatchers("/auth/me").authenticated()
                         .requestMatchers("/auth/logout").authenticated()

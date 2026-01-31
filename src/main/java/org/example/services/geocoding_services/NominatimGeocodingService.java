@@ -25,7 +25,7 @@ public class NominatimGeocodingService implements GeocodingService {
         List<NominatimGeocodeItem> items = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/search")
-                        .queryParam("q", address)      // <- surowy string, bez encode
+                        .queryParam("q", address)      // <- surowy string, bez encode, podawany zakres wyszukiwania
                         .queryParam("format", "json")
                         .queryParam("limit", 1)
                         .build())

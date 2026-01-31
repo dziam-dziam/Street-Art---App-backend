@@ -2,36 +2,28 @@ package org.example.dtos.artpiece;
 
 import lombok.*;
 import org.example.dtos.photo.PhotoResponseDto;
-import org.example.enums.ArtPieceStyles;
-import org.example.enums.ArtPieceTypes;
+
 import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArtPieceDto {
+public class ArtPieceDetailsDto {
     private Long id;
 
     private String artPieceAddress;
-
     private String artPieceName;
-
     private Boolean artPieceContainsText;
-
     private String artPiecePosition;
-
     private String artPieceUserDescription;
 
-    private String artPieceDistrict;
-
-    private String artPieceCity;
-
-    private Set<ArtPieceTypes> artPieceTypes;
-
-    private Set<ArtPieceStyles> artPieceStyles;
+    private String districtName;
+    private String cityName;
 
     private Set<String> artPieceTextLanguages;
+    private Set<String> artPieceTypes;
+    private Set<String> artPieceStyles;
 
-    private Set<PhotoResponseDto> artPiecePhotos;
+    private Set<PhotoResponseDto> photos;
 }

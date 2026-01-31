@@ -55,6 +55,7 @@ public class ArtPieceMapper {
         String artPieceEntityDistrictName = artPieceEntityDistrict.getDistrictName();
 
         return ArtPieceDto.builder()
+                .id(artPieceEntity.getId())
                 .artPieceCity(artPieceEntityCityName)
                 .artPieceAddress(artPieceEntity.getArtPieceAddress())
                 .artPieceName(artPieceEntity.getArtPieceName())
@@ -115,11 +116,12 @@ public class ArtPieceMapper {
         if (photos == null) return Collections.emptySet();
 
         return photos.stream()
-                .map(p -> PhotoResponseDto.builder()
-                        .fileName(p.getFileName())
-                        .contentType(p.getContentType())
-                        .sizeBytes(p.getSizeBytes())
-                        .downloadUrl("/api/photos/" + p.getId())
+                .map(photo -> PhotoResponseDto.builder()
+                        .id(photo.getId())
+                        .fileName(photo.getFileName())
+                        .contentType(photo.getContentType())
+                        .sizeBytes(photo.getSizeBytes())
+                        .downloadUrl("/api/photos/download/" + photo.getId())
                         .build())
                 .collect(Collectors.toSet());
     }

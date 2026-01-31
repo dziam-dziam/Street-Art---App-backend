@@ -24,7 +24,7 @@ public class UploadPhotoController {
                     .fileName(saved.getFileName())
                     .contentType(saved.getContentType())
                     .sizeBytes(saved.getSizeBytes())
-                    .downloadUrl("/api/photos/" + saved.getId())
+                    .downloadUrl("/api/photos/download/" + saved.getId())
                     .build();
         } catch (Exception exception) {
             throw new Exception("There was an issue at uploading photo");

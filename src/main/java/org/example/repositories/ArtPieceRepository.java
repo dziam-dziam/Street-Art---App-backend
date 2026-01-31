@@ -2,12 +2,14 @@ package org.example.repositories;
 
 import org.example.dtos.artpiece.ArtPieceMapPointDto;
 import org.example.entities.ArtPiece;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ArtPieceRepository extends JpaRepository<ArtPiece, Long> {
@@ -35,5 +37,16 @@ public interface ArtPieceRepository extends JpaRepository<ArtPiece, Long> {
         where a.artPieceLocation is not null
     """)
     List<ArtPieceMapPointDto> findAllMapPoints();
+
+    @EntityGraph(attributePaths = {
+            "artPieceDistrict",
+            "artPieceDistrict.districtCity",
+            "artPieceTypes",
+            "artPieceStyles",
+            "artPieceTextLanguages",
+            "artPiecePhotos"
+    })
+    @Query("select a from ArtPiece a where a.id = :id")
+    Optional<ArtPiece> findDetailsById(@Param("id") Long id);
 
 }
