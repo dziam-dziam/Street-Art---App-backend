@@ -1,5 +1,6 @@
 package org.example.controllers.add_controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.AddArtPieceDto;
@@ -14,8 +15,9 @@ public class AddControllers {
     private final AddArtPieceService addArtPieceService;
 
     @PostMapping("/addArtPiece")
-    public ArtPieceDto addArtPiece(@RequestBody AddArtPieceDto addArtPieceDto) {
+    public ArtPieceDto addArtPiece(@Valid @RequestBody AddArtPieceDto addArtPieceDto) {
         return addArtPieceService.createArtPiece(addArtPieceDto);
     }
+
 
 }

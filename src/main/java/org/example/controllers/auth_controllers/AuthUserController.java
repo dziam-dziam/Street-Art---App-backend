@@ -2,6 +2,7 @@ package org.example.controllers.auth_controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.app_user.LoginAppUserDto;
 import org.example.dtos.app_user.RegisterAppUserDto;
@@ -38,13 +39,12 @@ public class AuthUserController {
             new HttpSessionSecurityContextRepository();
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterAppUserDto registerAppUserDto) {
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterAppUserDto registerAppUserDto) {
         if (appUserRepository.findByAppUserEmail(registerAppUserDto.getAppUserEmail()).isPresent()) {
             return ResponseEntity.status(409).body("Email already exists");
         }
 
         registerAppUserService.registerAppUser(registerAppUserDto);
-
         return ResponseEntity.ok("Registered");
     }
 
