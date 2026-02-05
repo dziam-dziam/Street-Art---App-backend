@@ -14,6 +14,7 @@ import org.example.repositories.ArtPieceRepository;
 import org.example.repositories.DistrictRepository;
 import org.example.repositories.LocationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,31 +26,68 @@ public class UpdateArtPieceService {
     private final DistrictRepository districtRepository;
     private final ArtPieceMapper artPieceMapper;
 
-    public ArtPieceDto updateArtPieceById(Long artPieceId, UpdateArtPieceDto updatedArtPieceDto) {
-        final ArtPiece artPieceToBeUpdated = artPieceRepository.findById(artPieceId)
+    @Transactional
+    public ArtPieceDto updateArtPieceById(Long artPieceId, UpdateArtPieceDto dto) {
+        final ArtPiece ap = artPieceRepository.findById(artPieceId)
                 .orElseThrow(() -> new ArtPieceNotFoundByIdException(artPieceId));
 
-        Location updatedArtPieceDtoLocation = locationMapper
-                .mapAddressToLocationEntity(updatedArtPieceDto.getArtPieceAddress(), updatedArtPieceDto.getArtPieceCity());
+        // zapamiętaj "old" do porównania (ważne!)
+        final String oldAddress = ap.getArtPieceAddress();
+        final String oldCity = ap.getArtPieceDistrict().getDistrictCity().getCityName();
 
-        updatedArtPieceDtoLocation = locationRepository.save(updatedArtPieceDtoLocation);
+        // 1) district (jeśli podano)
+        if (dto.getArtPieceDistrict() != null && !dto.getArtPieceDistrict().isBlank()) {
+            final District district = districtRepository.findByDistrictName(dto.getArtPieceDistrict())
+                    .orElseThrow(() -> new DistrictNotFoundByNameException(dto.getArtPieceDistrict()));
+            ap.setArtPieceDistrict(district);
 
-        if (updatedArtPieceDto.getArtPieceDistrict() != null) {
-            final District updatedArtPieceDistrictEntity = districtRepository.findByDistrictName(updatedArtPieceDto.getArtPieceDistrict())
-                    .orElseThrow(() -> new DistrictNotFoundByNameException(updatedArtPieceDto.getArtPieceDistrict()));
-            artPieceToBeUpdated.setArtPieceDistrict(updatedArtPieceDistrictEntity);
+            // jeśli Location trzyma district, uaktualnij spójnie
+            if (ap.getArtPieceLocation() != null) {
+                ap.getArtPieceLocation().setLocationDistrict(district);
+            }
         }
 
-        artPieceToBeUpdated.setArtPieceAddress(updatedArtPieceDto.getArtPieceAddress());
-        artPieceToBeUpdated.setArtPieceName(updatedArtPieceDto.getArtPieceName());
-        artPieceToBeUpdated.setArtPieceUserDescription(updatedArtPieceDto.getArtPieceUserDescription());
-        artPieceToBeUpdated.setArtPieceTypes(updatedArtPieceDto.getArtPieceTypes());
-        artPieceToBeUpdated.setArtPieceStyles(updatedArtPieceDto.getArtPieceStyles());
-        artPieceToBeUpdated.setArtPieceTextLanguages(updatedArtPieceDto.getArtPieceTextLanguages());
-        artPieceToBeUpdated.setArtPieceLocation(updatedArtPieceDtoLocation);
+        // 2) merge pól (tylko non-null)
+        if (dto.getArtPieceAddress() != null) ap.setArtPieceAddress(dto.getArtPieceAddress());
+        if (dto.getArtPieceName() != null) ap.setArtPieceName(dto.getArtPieceName());
+        if (dto.getArtPieceUserDescription() != null) ap.setArtPieceUserDescription(dto.getArtPieceUserDescription());
 
-        artPieceRepository.save(artPieceToBeUpdated);
+        if (dto.getArtPiecePosition() != null) ap.setArtPiecePosition(dto.getArtPiecePosition());
+        if (dto.getArtPieceContainsText() != null) ap.setArtPieceContainsText(dto.getArtPieceContainsText());
 
-        return artPieceMapper.mapArtPieceEntityToArtPieceDto(artPieceToBeUpdated);
+        if (dto.getArtPieceTypes() != null) ap.setArtPieceTypes(dto.getArtPieceTypes());
+        if (dto.getArtPieceStyles() != null) ap.setArtPieceStyles(dto.getArtPieceStyles());
+        if (dto.getArtPieceTextLanguages() != null) ap.setArtPieceTextLanguages(dto.getArtPieceTextLanguages());
+
+        if (Boolean.FALSE.equals(ap.getArtPieceContainsText())) {
+            ap.setArtPieceTextLanguages(null); // albo Collections.emptySet()
+        }
+
+        final String effectiveCity =
+                (dto.getArtPieceCity() != null && !dto.getArtPieceCity().isBlank())
+                        ? dto.getArtPieceCity()
+                        : ap.getArtPieceDistrict().getDistrictCity().getCityName();
+
+        final String effectiveAddress = ap.getArtPieceAddress();
+
+        boolean addressChanged = (dto.getArtPieceAddress() != null) && !dto.getArtPieceAddress().equals(oldAddress);
+        boolean cityChanged = (dto.getArtPieceCity() != null) && !dto.getArtPieceCity().equals(oldCity);
+
+        if (addressChanged || cityChanged) {
+            Location loc = locationMapper.mapAddressToLocationEntity(effectiveAddress, effectiveCity);
+
+            // jeśli Location istnieje już w bazie -> loc ma id, wtedy nie zapisuj drugi raz
+            if (loc.getId() == null) {
+                loc = locationRepository.save(loc);
+            }
+
+            ap.setArtPieceLocation(loc);
+
+            // opcjonalnie: jeśli trzymasz district w Location, ustaw:
+            loc.setLocationDistrict(ap.getArtPieceDistrict());
+        }
+
+        ArtPiece saved = artPieceRepository.save(ap);
+        return artPieceMapper.mapArtPieceEntityToArtPieceDto(saved);
     }
 }
