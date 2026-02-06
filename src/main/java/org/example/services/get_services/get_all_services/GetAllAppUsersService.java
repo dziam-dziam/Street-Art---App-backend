@@ -2,6 +2,7 @@ package org.example.services.get_services.get_all_services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.app_user.AppUserAdminDto;
+import org.example.dtos.app_user.AppUserDto;
 import org.example.entities.AppUser;
 import org.example.mappers.AppUserMapper;
 import org.example.repositories.AppUserRepository;
@@ -26,4 +27,11 @@ public class GetAllAppUsersService {
         }
         return appUserDtos;
     }
+
+    public AppUserDto getAppUserDetails(Long id){
+        AppUser u = appUserRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+        return appUserMapper.mapAppUserEntityToAppUserDto(u);
+    }
+
 }

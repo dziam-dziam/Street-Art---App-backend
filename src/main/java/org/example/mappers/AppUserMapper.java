@@ -76,7 +76,6 @@ public class AppUserMapper {
         return AppUserDto.builder()
                 .appUserName(appUserEntity.getAppUserName())
                 .appUserEmail(appUserEntity.getAppUserEmail())
-                .appUserPassword(appUserEntity.getAppUserPassword())
                 .appUserCity(appUserEntityCityName)
                 .appUserNationality(appUserEntity.getAppUserNationality())
                 .appUserLanguagesSpoken(appUserEntity.getAppUserLanguagesSpoken())

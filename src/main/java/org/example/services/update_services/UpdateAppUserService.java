@@ -14,6 +14,7 @@ import org.example.mappers.AppUserMapper;
 import org.example.mappers.CommuteMapper;
 import org.example.repositories.AppUserRepository;
 import org.example.repositories.DistrictRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -27,31 +28,43 @@ public class UpdateAppUserService {
     private final CommuteMapper commuteMapper;
     private final DistrictRepository districtRepository;
     private final AppUserMapper appUserMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public AppUserDto updateAppUserByEmail(UpdateAppUserDto updateUserDto, String appUserBeingUpdatedEmail) {
+    public AppUserDto updateAppUserByEmail(UpdateAppUserDto dto, String email) {
 
-        final AppUser appUserBeingUpdated = appUserRepository.findByAppUserEmail(appUserBeingUpdatedEmail)
-                .orElseThrow(() -> new AppUserNotFoundByEmailException(appUserBeingUpdatedEmail));
+        AppUser u = appUserRepository.findByAppUserEmail(email)
+                .orElseThrow(() -> new AppUserNotFoundByEmailException(email));
 
-        final Set<Commute> updatedCommuteEntities = updateCommutes(updateUserDto,appUserBeingUpdated);
-
-        if (updateUserDto.getAppUserLiveInDistrict() != null) {
-            final District districtEntity = districtRepository.findByDistrictName(updateUserDto.getAppUserLiveInDistrict())
-                    .orElseThrow(() -> new DistrictNotFoundByNameException(updateUserDto.getAppUserLiveInDistrict()));
-            appUserBeingUpdated.setAppUserLiveInDistrict(districtEntity);
+        if (dto.getAppUserLiveInDistrict() != null && !dto.getAppUserLiveInDistrict().isBlank()) {
+            District d = districtRepository.findByDistrictName(dto.getAppUserLiveInDistrict())
+                    .orElseThrow(() -> new DistrictNotFoundByNameException(dto.getAppUserLiveInDistrict()));
+            u.setAppUserLiveInDistrict(d);
         }
 
-        appUserBeingUpdated.setAppUserName(updateUserDto.getAppUserName());
-        appUserBeingUpdated.setAppUserPassword(updateUserDto.getAppUserPassword());
-        appUserBeingUpdated.setAppUserEmail(updateUserDto.getAppUserEmail());
-        appUserBeingUpdated.setAppUserLanguagesSpoken(updateUserDto.getAppUserLanguagesSpoken());
-        appUserBeingUpdated.getAppUserCommutes().clear();
-        for (Commute commute : updatedCommuteEntities) {
-            appUserBeingUpdated.addCommute(commute);
+        if (dto.getAppUserName() != null && !dto.getAppUserName().isBlank()) {
+            u.setAppUserName(dto.getAppUserName().trim());
         }
 
-        appUserRepository.save(appUserBeingUpdated);
-        return appUserMapper.mapAppUserEntityToAppUserDto(appUserBeingUpdated);
+        if (dto.getAppUserEmail() != null && !dto.getAppUserEmail().isBlank()) {
+            u.setAppUserEmail(dto.getAppUserEmail().trim());
+        }
+
+        if (dto.getAppUserLanguagesSpoken() != null) {
+            u.setAppUserLanguagesSpoken(dto.getAppUserLanguagesSpoken());
+        }
+
+        if (dto.getAppUserPassword() != null && !dto.getAppUserPassword().isBlank()) {
+            u.setAppUserPassword(passwordEncoder.encode(dto.getAppUserPassword()));
+        }
+
+        if (dto.getAppUserCommuteDtos() != null) {
+            Set<Commute> updated = updateCommutes(dto, u);
+            u.getAppUserCommutes().clear();
+            for (Commute c : updated) u.addCommute(c);
+        }
+
+        AppUser saved = appUserRepository.save(u);
+        return appUserMapper.mapAppUserEntityToAppUserDto(saved);
     }
 
     private Set<Commute> updateCommutes(UpdateAppUserDto updateAppUserDto, AppUser appUserBeingUpdated){

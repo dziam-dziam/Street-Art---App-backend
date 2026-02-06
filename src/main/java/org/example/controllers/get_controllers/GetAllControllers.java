@@ -2,6 +2,7 @@ package org.example.controllers.get_controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.app_user.AppUserAdminDto;
+import org.example.dtos.app_user.AppUserDto;
 import org.example.dtos.artpiece.ArtPieceAdminDto;
 import org.example.dtos.city.CityDto;
 import org.example.dtos.district.DistrictAdminDto;
@@ -10,6 +11,7 @@ import org.example.services.get_services.get_all_services.GetAllArtPiecesService
 import org.example.services.get_services.get_all_services.GetAllCitiesService;
 import org.example.services.get_services.get_all_services.GetAllDistrictsService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,5 +46,11 @@ public class GetAllControllers {
     public List<AppUserAdminDto> getAllAppUsers() {
         return getAllAppUsersService.getAllAppUsers();
     }
+
+    @GetMapping("/appUsers/{id}")
+    public AppUserDto getAppUserDetails(@PathVariable Long id){
+        return getAllAppUsersService.getAppUserDetails(id);
+    }
+
 
 }
