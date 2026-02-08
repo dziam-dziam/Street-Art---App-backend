@@ -3,6 +3,7 @@ package org.example.services.add_and_register_services;
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.AddArtPieceDto;
+import org.example.entities.AppUser;
 import org.example.entities.ArtPiece;
 import org.example.entities.District;
 import org.example.entities.Location;
@@ -10,10 +11,13 @@ import org.example.exceptions.DistrictNotFoundByNameException;
 import org.example.exceptions.LocationAlreadyOccupiedException;
 import org.example.mappers.ArtPieceMapper;
 import org.example.mappers.LocationMapper;
+import org.example.repositories.AppUserRepository;
 import org.example.repositories.ArtPieceRepository;
 import org.example.repositories.DistrictRepository;
 import org.example.repositories.LocationRepository;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +28,16 @@ public class AddArtPieceService {
     private final ArtPieceRepository artPieceRepository;
     private final ArtPieceMapper artPieceMapper;
     private final DistrictRepository districtRepository;
+    private final AppUserRepository appUserRepository;
 
-    public ArtPieceDto createArtPiece(AddArtPieceDto addArtPieceDto) {
+    public ArtPieceDto createArtPiece(AddArtPieceDto addArtPieceDto, Principal principal) {
+        if (principal == null || principal.getName() == null ){
+            throw new IllegalStateException("User is not authenticated");
+        }
+
+        AppUser appUser = appUserRepository.findByAppUserEmail(principal.getName())
+                .orElseThrow(() -> new IllegalStateException("Logged user not found in DB: " + principal.getName()));
+
         if (addArtPieceDto == null) throw new IllegalArgumentException("AddArtPieceDto is null");
         if (addArtPieceDto.getArtPieceAddress() == null)
             throw new IllegalArgumentException("AddArtPieceDto address is null");
@@ -56,6 +68,8 @@ public class AddArtPieceService {
                 .build();
 
         final ArtPiece artPiece = artPieceMapper.mapArtPieceDtoToArtPieceEntity(artPieceDto);
+
+        artPiece.setArtPieceAppUserWhoAddedIt(appUser);
         artPiece.setArtPieceLocation(artPieceLocation);
 
         artPieceLocation.addArtPiece(artPiece);

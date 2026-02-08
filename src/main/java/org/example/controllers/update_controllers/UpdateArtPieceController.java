@@ -1,5 +1,6 @@
 package org.example.controllers.update_controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.artpiece.ArtPieceDto;
 import org.example.dtos.artpiece.UpdateArtPieceDto;
@@ -13,7 +14,7 @@ public class UpdateArtPieceController {
     private final UpdateArtPieceService updateArtPieceService;
 
     @PutMapping("artPiece/{id}")
-    public ArtPieceDto updateArtPiece(@PathVariable Long id, @RequestBody UpdateArtPieceDto updateArtPieceDto) {
+    public ArtPieceDto updateArtPiece(@PathVariable Long id, @Valid @RequestBody UpdateArtPieceDto updateArtPieceDto) {
         return updateArtPieceService.updateArtPieceById(id, updateArtPieceDto);
     }
 }
