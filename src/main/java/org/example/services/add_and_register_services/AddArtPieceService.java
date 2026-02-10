@@ -45,10 +45,7 @@ public class AddArtPieceService {
         final String addArtPieceDtoCityName = addArtPieceDto.getArtPieceCity();
         Location artPieceLocation = locationMapper.mapAddressToLocationEntity(addArtPieceDto.getArtPieceAddress(), addArtPieceDtoCityName);
 
-        if (artPieceLocation.getId() == null) {
             artPieceLocation = locationRepository.save(artPieceLocation);
-        } else throw new LocationAlreadyOccupiedException(artPieceRepository.getArtPiecesByLocationLatitudeAndLongitude
-                (artPieceLocation.getLocationLatitude(), artPieceLocation.getLocationLongitude()), artPieceLocation);
 
         final String artPieceDtoDistrictName = addArtPieceDto.getArtPieceDistrict();
         final District artPieceDtoDistrictEntity = districtRepository.findByDistrictName(artPieceDtoDistrictName)

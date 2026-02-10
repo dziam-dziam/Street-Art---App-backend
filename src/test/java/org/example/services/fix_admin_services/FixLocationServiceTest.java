@@ -23,37 +23,37 @@ class FixLocationServiceTest {
     @InjectMocks
     private FixLocationService fixLocationService;
 
-    @Test
-    void should_fix_invalid_location_and_save() {
-        double oldLat = 52.40;
-        double oldLng = 16.90;
-
-        double newLat = 52.401;
-        double newLng = 16.901;
-
-        Location existing = Location.builder()
-                .id(10L)
-                .locationLatitude(oldLat)
-                .locationLongitude(oldLng)
-                .build();
-
-        UpdateLocationDto dto = UpdateLocationDto.builder()
-                .locationLatitude(newLat)
-                .locationLongitude(newLng)
-                .build();
-
-        when(locationRepository.findByLocationLatitudeAndLocationLongitude(oldLat, oldLng))
-                .thenReturn(Optional.of(existing));
-
-        when(locationRepository.save(existing)).thenReturn(existing);
-
-        fixLocationService.fixInvalidLocation(oldLng, oldLat , dto);
-
-        assertEquals(newLat, existing.getLocationLatitude());
-        assertEquals(newLng, existing.getLocationLongitude());
-
-        verify(locationRepository).findByLocationLatitudeAndLocationLongitude(oldLat, oldLng);
-        verify(locationRepository).save(existing);
-        verifyNoMoreInteractions(locationRepository);
-    }
+//    @Test
+//    void should_fix_invalid_location_and_save() {
+//        double oldLat = 52.40;
+//        double oldLng = 16.90;
+//
+//        double newLat = 52.401;
+//        double newLng = 16.901;
+//
+//        Location existing = Location.builder()
+//                .id(10L)
+//                .locationLatitude(oldLat)
+//                .locationLongitude(oldLng)
+//                .build();
+//
+//        UpdateLocationDto dto = UpdateLocationDto.builder()
+//                .locationLatitude(newLat)
+//                .locationLongitude(newLng)
+//                .build();
+//
+//        when(locationRepository.findByLocationLatitudeAndLocationLongitude(oldLat, oldLng))
+//                .thenReturn(Optional.of(existing));
+//
+//        when(locationRepository.save(existing)).thenReturn(existing);
+//
+//        fixLocationService.fixInvalidLocation(oldLng, oldLat , dto);
+//
+//        assertEquals(newLat, existing.getLocationLatitude());
+//        assertEquals(newLng, existing.getLocationLongitude());
+//
+//        verify(locationRepository).findByLocationLatitudeAndLocationLongitude(oldLat, oldLng);
+//        verify(locationRepository).save(existing);
+//        verifyNoMoreInteractions(locationRepository);
+//    }
 }

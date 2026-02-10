@@ -2,8 +2,11 @@ package org.example.repositories;
 
 import org.example.dtos.artpiece.ArtPieceMapPointDto;
 import org.example.entities.ArtPiece;
+import org.example.enums.ArtPieceStyles;
+import org.example.enums.ArtPieceTypes;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,10 +15,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ArtPieceRepository extends JpaRepository<ArtPiece, Long> {
+public interface ArtPieceRepository extends JpaRepository<ArtPiece, Long>, JpaSpecificationExecutor<ArtPiece> {
 
     @Query("SELECT artpiece FROM ArtPiece artpiece WHERE artpiece.artPieceDistrict.districtName = :districtName ")
     List<ArtPiece> getArtPiecesFromDistrict(@Param("districtName") String districtName);
+
+    @Query("SELECT artpiece FROM ArtPiece artpiece WHERE :artPieceType MEMBER OF artpiece.artPieceTypes")
+    List<ArtPiece> getArtPieceWithType(@Param("artPieceType") ArtPieceTypes artPieceType);
+
+    @Query("SELECT artpiece FROM ArtPiece artpiece WHERE :artPieceStyle MEMBER OF artpiece.artPieceStyles")
+    List<ArtPiece> getArtPieceWithStyle(@Param("artPieceStyle") ArtPieceStyles artPieceStyle);
+
+    @Query("SELECT artpiece FROM ArtPiece artpiece WHERE artpiece.artPieceAppUserWhoAddedIt.id = :appUserId")
+    List<ArtPiece> getAllArtpiecesEnteredByParticularAppUser(@Param("appUserId") Long appUserId);
 
     @Query("SELECT artpiece FROM ArtPiece artpiece WHERE " +
             "artpiece.artPieceLocation.locationLongitude = :artPieceLongitude " +
