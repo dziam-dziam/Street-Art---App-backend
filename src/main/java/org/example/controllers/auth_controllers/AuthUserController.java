@@ -86,13 +86,21 @@ public class AuthUserController {
 
     @GetMapping("/me")
     public Map<String, Object> me(Authentication auth) {
+
+        String email = auth.getName();
+
+        AppUser user = appUserRepository.findByAppUserEmail(email)
+                .orElseThrow(() -> new AppUserNotFoundByEmailException(email));
+
         return Map.of(
-                "email", auth.getName(),
+                "email", email,
+                "name", user.getAppUserName(),
                 "roles", auth.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList())
         );
     }
+
 
 }
 
