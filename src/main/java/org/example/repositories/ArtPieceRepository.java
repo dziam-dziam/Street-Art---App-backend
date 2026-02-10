@@ -26,8 +26,23 @@ public interface ArtPieceRepository extends JpaRepository<ArtPiece, Long>, JpaSp
     @Query("SELECT artpiece FROM ArtPiece artpiece WHERE :artPieceStyle MEMBER OF artpiece.artPieceStyles")
     List<ArtPiece> getArtPieceWithStyle(@Param("artPieceStyle") ArtPieceStyles artPieceStyle);
 
-    @Query("SELECT artpiece FROM ArtPiece artpiece WHERE artpiece.artPieceAppUserWhoAddedIt.id = :appUserId")
-    List<ArtPiece> getAllArtpiecesEnteredByParticularAppUser(@Param("appUserId") Long appUserId);
+    @Query("""
+    select new org.example.dtos.artpiece.ArtPieceMapPointDto(
+        a.id,
+        a.artPieceName,
+        a.artPieceAddress,
+        d.districtName,
+        l.locationLatitude,
+        l.locationLongitude
+    )
+    from ArtPiece a
+    join a.artPieceLocation l
+    join a.artPieceDistrict d
+    where a.artPieceAppUserWhoAddedIt.id = :appUserId
+      and a.artPieceLocation is not null
+""")
+    List<ArtPieceMapPointDto> findMyMapPoints(@Param("appUserId") Long appUserId);
+
 
     @Query("SELECT artpiece FROM ArtPiece artpiece WHERE " +
             "artpiece.artPieceLocation.locationLongitude = :artPieceLongitude " +
