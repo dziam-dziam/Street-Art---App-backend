@@ -2,6 +2,7 @@ package org.example.services.update_services;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.app_user.ProfileDto;
 import org.example.dtos.commute.CommuteDto;
 import org.example.dtos.app_user.AppUserDto;
 import org.example.dtos.app_user.UpdateAppUserDto;
@@ -78,5 +79,17 @@ public class UpdateAppUserService {
         }
         return updatedCommuteEntities;
     }
+
+    public ProfileDto updateMe(UpdateAppUserDto dto, String email) {
+        AppUserDto updated = updateAppUserByEmail(dto, email);
+
+        return ProfileDto.builder()
+                .appUserName(updated.getAppUserName())
+                .appUserEmail(updated.getAppUserEmail())
+                .appUserLanguagesSpoken(updated.getAppUserLanguagesSpoken())
+                .build();
+    }
+
+
 }
 

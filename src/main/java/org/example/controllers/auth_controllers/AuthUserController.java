@@ -95,6 +95,7 @@ public class AuthUserController {
         return Map.of(
                 "email", email,
                 "name", user.getAppUserName(),
+                "languagesSpoken", user.getAppUserLanguagesSpoken(),
                 "roles", auth.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList())

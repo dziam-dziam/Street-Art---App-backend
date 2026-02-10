@@ -6,8 +6,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.app_user.AppUserDto;
+import org.example.dtos.app_user.ProfileDto;
 import org.example.dtos.app_user.UpdateAppUserDto;
 import org.example.services.update_services.UpdateAppUserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,4 +25,13 @@ public class UpdateAppUserController {
             @Email(message = "appUserEmail format is invalid.") String appUserEmail) {
         return updateAppUserService.updateAppUserByEmail(updateAppUserDto, appUserEmail);
     }
+
+    @PutMapping("/me")
+    public ProfileDto updateMe(
+            @Valid @RequestBody UpdateAppUserDto updateAppUserDto,
+            Authentication auth
+    ) {
+        return updateAppUserService.updateMe(updateAppUserDto, auth.getName());
+    }
+
 }
