@@ -76,4 +76,6 @@ public interface ArtPieceRepository extends JpaRepository<ArtPiece, Long>, JpaSp
     @Query("select a from ArtPiece a where a.id = :id")
     Optional<ArtPiece> findDetailsById(@Param("id") Long id);
 
+    Optional<ArtPiece> findByIdAndArtPieceAppUserWhoAddedIt_Id(Long id, Long userId);
+
 }

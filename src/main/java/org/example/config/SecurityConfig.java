@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/logout").authenticated()
                         .requestMatchers("/updateAppUser/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/my/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/my/**").authenticated()
 
                         .requestMatchers(HttpMethod.GET, "/getAll/**").hasRole("ADMIN")
                         .requestMatchers("/remove/**").hasRole("ADMIN")
