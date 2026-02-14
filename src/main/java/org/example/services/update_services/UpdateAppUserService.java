@@ -15,8 +15,10 @@ import org.example.mappers.AppUserMapper;
 import org.example.mappers.CommuteMapper;
 import org.example.repositories.AppUserRepository;
 import org.example.repositories.DistrictRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,11 +32,16 @@ public class UpdateAppUserService {
     private final DistrictRepository districtRepository;
     private final AppUserMapper appUserMapper;
     private final PasswordEncoder passwordEncoder;
+    private static final String ADMIN_MAIL = "damianzmudzinski3@gmail.com";
 
     public AppUserDto updateAppUserByEmail(UpdateAppUserDto dto, String email) {
 
         AppUser u = appUserRepository.findByAppUserEmail(email)
                 .orElseThrow(() -> new AppUserNotFoundByEmailException(email));
+
+        if (email != null && ADMIN_MAIL.equalsIgnoreCase(email.trim())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot edit protected admin user");
+        }
 
         if (dto.getAppUserLiveInDistrict() != null && !dto.getAppUserLiveInDistrict().isBlank()) {
             District d = districtRepository.findByDistrictName(dto.getAppUserLiveInDistrict())

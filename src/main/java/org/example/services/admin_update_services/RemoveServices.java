@@ -13,7 +13,9 @@ import org.example.repositories.AppUserRepository;
 import org.example.repositories.ArtPieceRepository;
 import org.example.repositories.CityRepository;
 import org.example.repositories.DistrictRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +26,16 @@ public class RemoveServices {
     private final CityRepository cityRepository;
     private final DistrictRepository districtRepository;
 
+    private static final String ADMIN_MAIL = "damianzmudzinski3@gmail.com";
+
     public void removeAppUserById(Long appUserId) {
         final AppUser appUserToRemove = appUserRepository.findById(appUserId)
                 .orElseThrow(() -> new AppUserNotFoundByIdException(appUserId));
 
+        if (appUserToRemove.getAppUserEmail() != null
+                && ADMIN_MAIL.equalsIgnoreCase(appUserToRemove.getAppUserEmail().trim())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot delete protected admin user");
+        }
         appUserRepository.delete(appUserToRemove);
     }
 
