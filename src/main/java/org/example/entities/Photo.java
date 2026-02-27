@@ -26,7 +26,7 @@ public class Photo {
     private Long sizeBytes;
 
     @Lob
-    @Column(name = "data", nullable = false)
+    @Column(name = "data", nullable = false, columnDefinition = "bytea")
     private byte[] imageData;
 
     @ManyToOne(fetch = FetchType.LAZY)
