@@ -12,38 +12,31 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-
-                        .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register").permitAll()
                         .requestMatchers("/auth/registerCity", "/auth/registerDistrict").permitAll()
                         .requestMatchers("/auth/addCommute").permitAll()
                         .requestMatchers("/map/**").permitAll()
                         .requestMatchers("/api/photos/download/**").permitAll()
-
-                        .requestMatchers("/auth/me").authenticated()
-                        .requestMatchers("/auth/logout").authenticated()
-                        .requestMatchers("/updateAppUser/me").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/my/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/my/**").authenticated()
-
-                        .requestMatchers(HttpMethod.GET, "/getAll/**").hasRole("ADMIN")
-                        .requestMatchers("/remove/**").hasRole("ADMIN")
-                        .requestMatchers("/updateAppUser/**").hasRole("ADMIN")
-                        .requestMatchers("/updateArtPiece/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
                         .anyRequest().authenticated()
                 );
+
         return http.build();
     }
 
