@@ -25,7 +25,6 @@ public class Photo {
     @Column
     private Long sizeBytes;
 
-    @Lob
     @Column(name = "data", nullable = false)
     private byte[] imageData;
 
