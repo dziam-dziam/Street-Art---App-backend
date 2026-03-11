@@ -34,7 +34,9 @@ public class SecurityConfig {
                         .requestMatchers("/auth/addCommute").permitAll()
                         .requestMatchers("/map/**").permitAll()
                         .requestMatchers("/api/photos/download/**").permitAll()
+                        .requestMatchers("/addNew/**").permitAll()
                         .anyRequest().authenticated()
+
                 );
 
         return http.build();
