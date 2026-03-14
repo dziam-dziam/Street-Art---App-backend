@@ -16,7 +16,9 @@ public class CorsConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOriginPatterns(List.of(
                 "http://localhost:*",
-                "https://*.vercel.app"
+                "https://*.vercel.app",
+                "https://streetapp.xyz",
+                "https://www.streetapp.xyz"
         ));
 
         corsConfiguration.setAllowedMethods(List.of("POST", "DELETE", "GET", "PUT", "OPTIONS"));
